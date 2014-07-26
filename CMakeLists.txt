@@ -27,11 +27,11 @@ endif()
 project(bigdata4d CXX)
 
 # enable or disable MPI, enabled by default
-set(MPI TRUE CACHE BOOL "Choose to enable MPI or not.")
-if(MPI)
+set(USEMPI TRUE CACHE BOOL "Choose to enable MPI or not.")
+if(USEMPI)
   message(STATUS "MPI: enabled.")
   # add the necessary precompiler flag
-  add_definitions("-DMPI")
+  add_definitions("-DUSEMPI")
 else()
   message(STATUS "MPI: disabled.")
 endif()

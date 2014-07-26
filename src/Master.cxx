@@ -21,14 +21,14 @@
  * along with BigData4D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifdef MPI
+#ifdef USEMPI
 #include <mpi.h>
 #endif
 
 #include <iostream>
 #include "Master.h"
 
-#ifdef MPI
+#ifdef USEMPI
 Master::Master()
 {
   initialized = false;
@@ -102,7 +102,7 @@ Master::~Master()
 
 void Master::cleanup()
 {
-#ifdef MPI
+#ifdef USEMPI
   if(initialized)
     MPI_Finalize();
 #endif
@@ -182,13 +182,13 @@ int Master::init()
 }
 */
 
-int Master::printMessage(std::string message)
+void Master::printMessage(std::string message)
 {
   if(mpiid == 0)
     std::cout << message;
 }
 
-int Master::printError(std::string message)
+void Master::printError(std::string message)
 {
   if(mpiid == 0)
     std::cerr << message;
@@ -196,7 +196,7 @@ int Master::printError(std::string message)
 
 int Master::checkError(int n)
 {
-#ifdef MPI
+#ifdef USEMPI
   char errbuffer[MPI_MAX_ERROR_STRING];
   int errlen;
 

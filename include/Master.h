@@ -24,7 +24,7 @@
 #ifndef MASTER
 #define MASTER
 
-#ifdef MPI
+#ifdef USEMPI
 #include <mpi.h>
 #endif
 
@@ -41,8 +41,8 @@ class Master
     Master &operator=(const Master &) = delete;
 
     // int init();
-    int printMessage(std::string);
-    int printError  (std::string);
+    void printMessage(std::string);
+    void printError  (std::string);
 
     int mpiid;
 
