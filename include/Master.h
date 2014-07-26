@@ -30,7 +30,7 @@
 class Master
 {
   public:
-    Master(int, char**);
+    Master();
     ~Master();
 
     // disable the assignment and copy constructors
@@ -49,9 +49,6 @@ class Master
 
     bool allocated;
     bool initialized;
-
-    std::string mode;
-    std::string name;
 
     int nprocs;
     MPI_Comm commxy;

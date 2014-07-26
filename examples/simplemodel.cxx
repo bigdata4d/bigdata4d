@@ -6,8 +6,8 @@ int main(int argc, char *argv[])
 {
   try
   {
-    Master master(argc, argv);
-    Application application(&master);
+    Master master;
+    Application application(&master, argc, argv);
 
     application.exec();
   }

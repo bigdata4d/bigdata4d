@@ -29,8 +29,12 @@ class Master;
 class Application
 {
   public:
-    Application(Master *);
+    Application(Master *, int, char **);
     ~Application();
+
+    // disable the assignment and copy constructors
+    Application(const Application &) = delete;
+    Application &operator=(const Application &) = delete;
 
     void exec();
 

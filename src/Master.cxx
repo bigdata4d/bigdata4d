@@ -25,7 +25,7 @@
 #include <iostream>
 #include "Master.h"
 
-Master::Master(int argc, char *argv[])
+Master::Master()
 {
   initialized = false;
   allocated   = false;
@@ -73,22 +73,6 @@ Master::Master(int argc, char *argv[])
     std::sprintf(message, "Starting run on %d processes\n", nprocs);
     printMessage(message);
 
-    // process the command line options
-    name = "default";
-    if(argc <= 1)
-    {
-      if(mpiid == 0) std::printf("No command line options\n");
-      mode = "default";
-    }
-    else
-    {
-      // check the execution mode
-      mode = argv[1];
-
-      if(argc > 2)
-        name = argv[2];
-    }
-    if(mpiid == 0) std::printf("Mode = %s, Name = %s\n", mode.c_str(), name.c_str());
   }
 
   catch (...)

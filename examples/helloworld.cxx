@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
   try
   {
-    Master master(argc, argv);
+    Master master;
     master.printMessage("Hello World!\n");
   }
 
