@@ -24,7 +24,10 @@
 #ifndef MASTER
 #define MASTER
 
+#ifdef MPI
 #include <mpi.h>
+#endif
+
 #include <string>
 
 class Master
@@ -51,6 +54,5 @@ class Master
     bool initialized;
 
     int nprocs;
-    MPI_Comm commxy;
 };
 #endif

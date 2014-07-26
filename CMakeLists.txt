@@ -26,6 +26,16 @@ endif()
 # start the project only after the system specific settings are loaded
 project(bigdata4d CXX)
 
+# enable or disable MPI, enabled by default
+set(MPI TRUE CACHE BOOL "Choose to enable MPI or not.")
+if(MPI)
+  message(STATUS "MPI: enabled.")
+  # add the necessary precompiler flag
+  add_definitions("-DMPI")
+else()
+  message(STATUS "MPI: disabled.")
+endif()
+
 # only set the compiler flags when the cache is created
 # to enable editing of the flags in the CMakeCache.txt file
 if(NOT HASCACHE)

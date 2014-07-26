@@ -21,14 +21,18 @@
  * along with BigData4D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef MPI
 #include <mpi.h>
+#endif
+
 #include <iostream>
 #include "Master.h"
 
+#ifdef MPI
 Master::Master()
 {
   initialized = false;
-  allocated   = false;
+  allocated = false;
 
   mpiid = 0;
 
@@ -61,18 +65,9 @@ Master::Master()
       throw 1;
     }
 
-    // store a temporary copy of COMM_WORLD in commxy
-    n = MPI_Comm_dup(MPI_COMM_WORLD, &commxy);
-    if(checkError(n))
-    {
-      printError("Error in Master constructor\n");
-      throw 1;
-    }
-
     char message[1024];
-    std::sprintf(message, "Starting run on %d processes\n", nprocs);
+    std::sprintf(message, "Starting Master on %d process(es)\n", nprocs);
     printMessage(message);
-
   }
 
   catch (...)
@@ -81,20 +76,36 @@ Master::Master()
     throw 1;
   }
 }
+#else
+Master::Master()
+{
+  initialized = true;
+  allocated = false;
+
+  mpiid = 0;
+  nprocs = 1;
+
+  char message[1024];
+  std::sprintf(message, "Starting Master on %d process(es)\n", nprocs);
+  printMessage(message);
+}
+#endif
 
 Master::~Master()
 {
   cleanup();
 
   char message[1024];
-  std::sprintf(message, "Finished run on %d processes\n", nprocs);
+  std::sprintf(message, "Finished Master on %d process(es)\n", nprocs);
   printMessage(message);
 }
 
 void Master::cleanup()
 {
+#ifdef MPI
   if(initialized)
     MPI_Finalize();
+#endif
 }
 
 /*
@@ -185,6 +196,7 @@ int Master::printError(std::string message)
 
 int Master::checkError(int n)
 {
+#ifdef MPI
   char errbuffer[MPI_MAX_ERROR_STRING];
   int errlen;
 
@@ -194,6 +206,7 @@ int Master::checkError(int n)
     std::printf("ERROR MPI %s\n", errbuffer);
     return 1;
   }
+#endif
 
   return 0;
 }
