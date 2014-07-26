@@ -15,8 +15,8 @@ include_directories(${INCLUDE_DIRS} "../include")
 
 # send a precompiler statement replacing the git hash
 # add_definitions(-DGITHASH="${GITHASH}")
-add_executable(helloworld helloworld.cxx)
+add_executable(helloworld helloworld/helloworld.cxx)
 target_link_libraries(helloworld bigdata4d ${LIBS})
 
-add_executable(simplemodel Simpleapp.cxx simplemodel.cxx)
+add_executable(simplemodel simplemodel/simplemodel.cxx simplemodel/Simpleapp.cxx)
 target_link_libraries(simplemodel bigdata4d ${LIBS})
