@@ -30,10 +30,13 @@
 class Master
 {
   public:
-    Master();
+    Master(int, char**);
     ~Master();
 
-    int start(int, char**);
+    // disable the assignment and copy constructors
+    Master(const Master &) = delete;
+    Master &operator=(const Master &) = delete;
+
     // int init();
     int printMessage(std::string);
     int printError  (std::string);
@@ -41,6 +44,7 @@ class Master
     int mpiid;
 
   private:
+    void cleanup();
     int checkError(int);
 
     bool allocated;

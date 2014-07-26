@@ -25,70 +25,92 @@
 #include <iostream>
 #include "Master.h"
 
-Master::Master()
+Master::Master(int argc, char *argv[])
 {
   initialized = false;
   allocated   = false;
+
+  mpiid = 0;
+
+  try
+  {
+    // initialize the MPI
+    int n;
+    n = MPI_Init(NULL, NULL);
+    if(checkError(n))
+    {
+      printError("Error in Master constructor\n");
+      throw 1;
+    }
+
+    initialized = true;
+
+    // get the rank of the current process
+    n = MPI_Comm_rank(MPI_COMM_WORLD, &mpiid);
+    if(checkError(n))
+    {
+      printError("Error in Master constructor\n");
+      throw 1;
+    }
+
+    // get the total number of processors
+    n = MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+    if(checkError(n))
+    {
+      printError("Error in Master constructor\n");
+      throw 1;
+    }
+
+    // store a temporary copy of COMM_WORLD in commxy
+    n = MPI_Comm_dup(MPI_COMM_WORLD, &commxy);
+    if(checkError(n))
+    {
+      printError("Error in Master constructor\n");
+      throw 1;
+    }
+
+    char message[1024];
+    std::sprintf(message, "Starting run on %d processes\n", nprocs);
+    printMessage(message);
+
+    // process the command line options
+    name = "default";
+    if(argc <= 1)
+    {
+      if(mpiid == 0) std::printf("No command line options\n");
+      mode = "default";
+    }
+    else
+    {
+      // check the execution mode
+      mode = argv[1];
+
+      if(argc > 2)
+        name = argv[2];
+    }
+    if(mpiid == 0) std::printf("Mode = %s, Name = %s\n", mode.c_str(), name.c_str());
+  }
+
+  catch (...)
+  {
+    cleanup();
+    throw 1;
+  }
 }
 
 Master::~Master()
 {
+  cleanup();
+
   char message[1024];
   std::sprintf(message, "Finished run on %d processes\n", nprocs);
   printMessage(message);
-
-  if(initialized)
-    MPI_Finalize();
 }
 
-int Master::start(int argc, char *argv[])
+void Master::cleanup()
 {
-  int n;
-
-  // initialize the MPI
-  n = MPI_Init(NULL, NULL);
-  if(checkError(n))
-    return 1;
-
-  initialized = true;
-
-  // get the rank of the current process
-  n = MPI_Comm_rank(MPI_COMM_WORLD, &mpiid);
-  if(checkError(n))
-    return 1;
-
-  // get the total number of processors
-  n = MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
-  if(checkError(n))
-    return 1;
-
-  // store a temporary copy of COMM_WORLD in commxy
-  n = MPI_Comm_dup(MPI_COMM_WORLD, &commxy);
-  if(checkError(n))
-    return 1;
-
-  char message[1024];
-  std::sprintf(message, "Starting run on %d processes\n", nprocs);
-  printMessage(message);
-
-  // process the command line options
-  name = "default";
-  if(argc <= 1)
-  {
-    if(mpiid == 0) std::printf("No command line options\n");
-    mode = "default";
-  }
-  else
-  {
-    // check the execution mode
-    mode = argv[1];
-
-    if(argc > 2)
-      name = argv[2];
-  }
-  if(mpiid == 0) std::printf("Mode = %s, Name = %s\n", mode.c_str(), name.c_str());
-
-  return 0;
+  if(initialized)
+    MPI_Finalize();
 }
 
 /*

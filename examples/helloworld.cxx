@@ -3,10 +3,16 @@
 
 int main(int argc, char *argv[])
 {
-  Master master;
-  master.start(argc, argv);
+  try
+  {
+    Master master(argc, argv);
+    master.printMessage("Hello World!\n");
+  }
 
-  master.printMessage("Hello World!\n");
+  catch (...)
+  {
+    return 1;
+  }
 
   return 0;
 }
