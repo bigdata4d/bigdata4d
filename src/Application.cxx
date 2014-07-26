@@ -32,7 +32,3 @@ Application::Application(Master *masterin, int argc, char *argv[])
 Application::~Application()
 {
 }
-
-void Application::exec()
-{
-}

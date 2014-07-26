@@ -45,12 +45,12 @@ Simpleapp::Simpleapp(Master *masterin, int argc, char *argv[]) : Application(mas
   if(mpiid == 0) std::printf("Mode = %s, Name = %s\n", mode.c_str(), name.c_str());
   */
 
-  master->printMessage("Constructed application\n");
+  master->printMessage("Started application Simpleapp\n");
 }
 
 Simpleapp::~Simpleapp()
 {
-  master->printMessage("Destructed application\n");
+  master->printMessage("Finished application Simpleapp\n");
 }
 
 void Simpleapp::exec()

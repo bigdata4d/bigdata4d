@@ -36,7 +36,7 @@ class Application
     Application(const Application &) = delete;
     Application &operator=(const Application &) = delete;
 
-    virtual void exec();
+    virtual void exec() = 0;
 
   protected:
     Master *master;
