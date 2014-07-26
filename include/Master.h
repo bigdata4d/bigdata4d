@@ -35,6 +35,8 @@ class Master
 
     int start(int, char**);
     // int init();
+    int printMessage(std::string);
+    int printError  (std::string);
 
     int mpiid;
 

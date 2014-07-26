@@ -22,6 +22,7 @@
  */
 
 #include <mpi.h>
+#include <iostream>
 #include "Master.h"
 
 Master::Master()
@@ -32,7 +33,9 @@ Master::Master()
 
 Master::~Master()
 {
-  if(mpiid == 0) std::printf("Finished run on %d processes\n", nprocs);
+  char message[1024];
+  std::sprintf(message, "Finished run on %d processes\n", nprocs);
+  printMessage(message);
 
   if(initialized)
     MPI_Finalize();
@@ -64,7 +67,9 @@ int Master::start(int argc, char *argv[])
   if(checkError(n))
     return 1;
 
-  if(mpiid == 0) std::printf("Starting run on %d processes\n", nprocs);
+  char message[1024];
+  std::sprintf(message, "Starting run on %d processes\n", nprocs);
+  printMessage(message);
 
   // process the command line options
   name = "default";
@@ -159,6 +164,18 @@ int Master::init()
   return 0;
 }
 */
+
+int Master::printMessage(std::string message)
+{
+  if(mpiid == 0)
+    std::cout << message;
+}
+
+int Master::printError(std::string message)
+{
+  if(mpiid == 0)
+    std::cerr << message;
+}
 
 int Master::checkError(int n)
 {

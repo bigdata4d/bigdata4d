@@ -6,8 +6,7 @@ int main(int argc, char *argv[])
   Master master;
   master.start(argc, argv);
 
-  if(master.mpiid == 0)
-    std::cout << "Hello world!\n";
+  master.printMessage("Hello World!\n");
 
   return 0;
 }
