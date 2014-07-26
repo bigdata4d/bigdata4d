@@ -1,0 +1,176 @@
+/*
+ * BigData4D
+ * Copyright (c) 2014 Chiel van Heerwaarden
+ *
+ * Many of the classes and functions in BigData4D are derived from
+ * MicroHH (https://github.com/MicroHH)
+ *
+ * This file is part of BigData4D
+ *
+ * BigData4D is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+
+ * BigData4D is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with BigData4D.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <mpi.h>
+#include "Master.h"
+
+Master::Master()
+{
+  initialized = false;
+  allocated   = false;
+}
+
+Master::~Master()
+{
+  if(mpiid == 0) std::printf("Finished run on %d processes\n", nprocs);
+
+  if(initialized)
+    MPI_Finalize();
+}
+
+int Master::start(int argc, char *argv[])
+{
+  int n;
+
+  // initialize the MPI
+  n = MPI_Init(NULL, NULL);
+  if(checkError(n))
+    return 1;
+
+  initialized = true;
+
+  // get the rank of the current process
+  n = MPI_Comm_rank(MPI_COMM_WORLD, &mpiid);
+  if(checkError(n))
+    return 1;
+
+  // get the total number of processors
+  n = MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+  if(checkError(n))
+    return 1;
+
+  // store a temporary copy of COMM_WORLD in commxy
+  n = MPI_Comm_dup(MPI_COMM_WORLD, &commxy);
+  if(checkError(n))
+    return 1;
+
+  if(mpiid == 0) std::printf("Starting run on %d processes\n", nprocs);
+
+  // process the command line options
+  name = "default";
+  if(argc <= 1)
+  {
+    if(mpiid == 0) std::printf("No command line options\n");
+    mode = "default";
+  }
+  else
+  {
+    // check the execution mode
+    mode = argv[1];
+
+    if(argc > 2)
+      name = argv[2];
+  }
+  if(mpiid == 0) std::printf("Mode = %s, Name = %s\n", mode.c_str(), name.c_str());
+
+  return 0;
+}
+
+/*
+int Master::init()
+{
+  int n;
+
+  if(nprocs != npx*npy)
+  {
+    if(mpiid == 0) std::printf("ERROR nprocs = %d does not equal npx*npy = %d*%d\n", nprocs, npx, npy);
+    return 1;
+  }
+
+  int dims    [2] = {npy, npx};
+  int periodic[2] = {true, true};
+
+  // define the dimensions of the 2-D grid layout
+  n = MPI_Dims_create(nprocs, 2, dims);
+  if(checkerror(n))
+    return 1;
+
+  // create a 2-D grid communicator that is optimized for grid to grid transfer
+  // first, free our temporary copy of COMM_WORLD
+  n = MPI_Comm_free(&commxy);
+  if(checkerror(n))
+    return 1;
+  // for now, do not reorder processes, blizzard gives large performance loss
+  n = MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periodic, false, &commxy);
+  if(checkerror(n))
+    return 1;
+  n = MPI_Comm_rank(commxy, &mpiid);
+  if(checkerror(n))
+    return 1;
+
+  // retrieve the x- and y-coordinates in the 2-D grid for each process
+  int mpicoords[2];
+  n = MPI_Cart_coords(commxy, mpiid, 2, mpicoords);
+  if(checkerror(n))
+    return 1;
+
+  mpicoordx = mpicoords[1];
+  mpicoordy = mpicoords[0];
+
+  int dimx[2] = {false, true };
+  int dimy[2] = {true , false};
+
+  n = MPI_Cart_sub(commxy, dimx, &commx);
+  if(checkerror(n))
+    return 1;
+  n = MPI_Cart_sub(commxy, dimy, &commy);
+  if(checkerror(n))
+    return 1;
+
+  // find out who are the neighbors of this process to facilitate the communication routines
+  n = MPI_Cart_shift(commxy, 1, 1, &nwest , &neast );
+  if(checkerror(n))
+    return 1;
+  n = MPI_Cart_shift(commxy, 0, 1, &nsouth, &nnorth);
+  if(checkerror(n))
+    return 1;
+
+  // create the requests arrays for the nonblocking sends
+  int npmax;
+  npmax = std::max(npx, npy);
+
+  // have at least as many communicators as prognostic variables
+  npmax = std::max(npmax, 8*4);
+  reqs  = new MPI_Request[npmax*2];
+  reqsn = 0;
+
+  allocated = true;
+
+  return 0;
+}
+*/
+
+int Master::checkError(int n)
+{
+  char errbuffer[MPI_MAX_ERROR_STRING];
+  int errlen;
+
+  if(n != MPI_SUCCESS)
+  {
+    MPI_Error_string(n, errbuffer, &errlen);
+    std::printf("ERROR MPI %s\n", errbuffer);
+    return 1;
+  }
+
+  return 0;
+}
