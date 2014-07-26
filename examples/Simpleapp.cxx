@@ -21,24 +21,39 @@
  * along with BigData4D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef APPLICATION
-#define APPLICATION
+#include "Simpleapp.h"
+#include "Master.h"
 
-class Master;
-
-class Application
+Simpleapp::Simpleapp(Master *masterin, int argc, char *argv[]) : Application(masterin, argc, argv)
 {
-  public:
-    Application(Master *, int, char **);
-    virtual ~Application();
+  /*
+  // process the command line options
+  name = "default";
+  if(argc <= 1)
+  {
+    if(mpiid == 0) std::printf("No command line options\n");
+    mode = "default";
+  }
+  else
+  {
+    // check the execution mode
+    mode = argv[1];
 
-    // disable the assignment and copy constructors
-    Application(const Application &) = delete;
-    Application &operator=(const Application &) = delete;
+    if(argc > 2)
+      name = argv[2];
+  }
+  if(mpiid == 0) std::printf("Mode = %s, Name = %s\n", mode.c_str(), name.c_str());
+  */
 
-    virtual void exec();
+  master->printMessage("Constructed application\n");
+}
 
-  protected:
-    Master *master;
-};
-#endif
+Simpleapp::~Simpleapp()
+{
+  master->printMessage("Destructed application\n");
+}
+
+void Simpleapp::exec()
+{
+  master->printMessage("Hello world!\n");
+}

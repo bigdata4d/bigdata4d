@@ -21,24 +21,19 @@
  * along with BigData4D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef APPLICATION
-#define APPLICATION
+#ifndef SIMPLEAPP
+#define SIMPLEAPP
+
+#include "Application.h"
 
 class Master;
 
-class Application
+class Simpleapp : public Application
 {
   public:
-    Application(Master *, int, char **);
-    virtual ~Application();
+    Simpleapp(Master *, int, char **);
+    ~Simpleapp();
 
-    // disable the assignment and copy constructors
-    Application(const Application &) = delete;
-    Application &operator=(const Application &) = delete;
-
-    virtual void exec();
-
-  protected:
-    Master *master;
+    void exec();
 };
 #endif

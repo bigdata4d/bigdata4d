@@ -1,13 +1,13 @@
 #include <iostream>
 #include "Master.h"
-#include "Application.h"
+#include "Simpleapp.h"
 
 int main(int argc, char *argv[])
 {
   try
   {
     Master master;
-    Application application(&master, argc, argv);
+    Simpleapp application(&master, argc, argv);
 
     application.exec();
   }

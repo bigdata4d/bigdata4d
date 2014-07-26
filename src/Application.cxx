@@ -26,35 +26,13 @@
 
 Application::Application(Master *masterin, int argc, char *argv[])
 {
-  /*
-  // process the command line options
-  name = "default";
-  if(argc <= 1)
-  {
-    if(mpiid == 0) std::printf("No command line options\n");
-    mode = "default";
-  }
-  else
-  {
-    // check the execution mode
-    mode = argv[1];
-
-    if(argc > 2)
-      name = argv[2];
-  }
-  if(mpiid == 0) std::printf("Mode = %s, Name = %s\n", mode.c_str(), name.c_str());
-  */
-
   master = masterin;
-  master->printMessage("Constructed application\n");
 }
 
 Application::~Application()
 {
-  master->printMessage("Destructed application\n");
 }
 
 void Application::exec()
 {
-  master->printMessage("Hello world!\n");
 }
