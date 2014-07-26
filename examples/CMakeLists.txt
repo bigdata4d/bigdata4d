@@ -17,3 +17,6 @@ include_directories(${INCLUDE_DIRS} "../include")
 # add_definitions(-DGITHASH="${GITHASH}")
 add_executable(helloworld helloworld.cxx)
 target_link_libraries(helloworld bigdata4d ${LIBS})
+
+add_executable(simplemodel simplemodel.cxx)
+target_link_libraries(simplemodel bigdata4d ${LIBS})
