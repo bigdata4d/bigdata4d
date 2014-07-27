@@ -35,17 +35,22 @@ Timer::~Timer()
 
 void Timer::start()
 {
-  master->printMessage("Start timer");
+  master->printMessage("Start timer\n");
   samples.push_back(master->getTime());
 }
 
 void Timer::end()
 {
   samples.push_back(master->getTime());
-  master->printMessage("End timer");
+  master->printMessage("End timer\n");
 }
 
 void Timer::sample()
 {
   samples.push_back(master->getTime());
+}
+
+double Timer::getTotal()
+{
+  return samples.back() - samples.front();
 }

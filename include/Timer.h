@@ -38,6 +38,8 @@ class Timer
     void sample();
     void end();
 
+    double getTotal();
+
   protected:
     Master *master;
     std::vector<double> samples;
