@@ -64,10 +64,10 @@ namespace
 Field& Field::operator= (const Field &fieldin)
 {
   // non-vectorized copy
-  this->data = fieldin.data;
+  // this->data = fieldin.data;
 
   // vectorized copy
-  // copyvec((int*)data[0], (int*)&fieldin.data[0], data.size());
+  copyvec((int*)&data[0], (int*)&fieldin.data[0], data.size());
 
   return *this;
 }

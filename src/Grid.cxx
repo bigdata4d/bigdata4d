@@ -45,6 +45,3 @@ int Grid::getntot()
 {
   return ntot;
 }
-
-
-
