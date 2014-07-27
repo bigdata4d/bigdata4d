@@ -72,10 +72,21 @@ Field& Field::operator= (const Field &fieldin)
   return *this;
 }
 
+namespace
+{
+  inline void copyaddvec(int * const restrict out, const int * const restrict in, const int size)
+  {
+    for(int i=0; i<size; ++i)
+      out[i] += in[i];
+  }
+}
+
 Field& Field::operator+=(const Field &fieldin)
 {
-  for(int i=0; i<this->data.size(); ++i)
-    this->data[i] += fieldin.data[i];
+  // for(int i=0; i<this->data.size(); ++i)
+  //   this->data[i] += fieldin.data[i];
+
+  copyaddvec(&data[0], &fieldin.data[0], data.size());
 
   return *this;
 }
