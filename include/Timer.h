@@ -21,40 +21,18 @@
  * along with BigData4D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MASTER
-#define MASTER
+#ifndef TIMER
+#define TIMER
 
-#ifdef USEMPI
-#include <mpi.h>
-#endif
+class Master;
 
-#include <string>
-
-class Master
+class Timer
 {
   public:
-    Master();
-    ~Master();
+    Timer(Master *);
+    virtual ~Timer();
 
-    // disable the assignment and copy constructors
-    Master(const Master &) = delete;
-    Master &operator=(const Master &) = delete;
-
-    // int init();
-    void printMessage(std::string);
-    void printError  (std::string);
-
-    double gettime();
-
-    int mpiid;
-
-  private:
-    void cleanup();
-    int checkError(int);
-
-    bool allocated;
-    bool initialized;
-
-    int nprocs;
+  protected:
+    Master *master;
 };
 #endif

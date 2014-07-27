@@ -23,6 +23,8 @@
 
 #ifdef USEMPI
 #include <mpi.h>
+#else
+#include <sys/time.h>
 #endif
 
 #include <iostream>
@@ -209,4 +211,17 @@ int Master::checkError(int n)
 #endif
 
   return 0;
+}
+
+double Master::gettime()
+{
+#ifdef USEMPI
+  return MPI_Wtime();
+#else
+  timeval timestruct;
+  gettimeofday(&timestruct, NULL);
+  double time;
+  time = (double)timestruct.tv_sec + (double)timestruct.tv_usec*1.e-6;
+  return time;
+#endif
 }
