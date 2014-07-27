@@ -21,10 +21,10 @@
  * along with BigData4D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Simpleapp.h"
+#include "SimpleApplication.h"
 #include "Master.h"
 
-Simpleapp::Simpleapp(Master *masterin, int argc, char *argv[]) : Application(masterin, argc, argv)
+SimpleApplication::SimpleApplication(Master *masterin, int argc, char *argv[]) : Application(masterin, argc, argv)
 {
   /*
   // process the command line options
@@ -45,15 +45,15 @@ Simpleapp::Simpleapp(Master *masterin, int argc, char *argv[]) : Application(mas
   if(mpiid == 0) std::printf("Mode = %s, Name = %s\n", mode.c_str(), name.c_str());
   */
 
-  master->printMessage("Started application Simpleapp\n");
+  master->printMessage("Started application SimpleApplication\n");
 }
 
-Simpleapp::~Simpleapp()
+SimpleApplication::~SimpleApplication()
 {
-  master->printMessage("Finished application Simpleapp\n");
+  master->printMessage("Finished application SimpleApplication\n");
 }
 
-void Simpleapp::exec()
+void SimpleApplication::exec()
 {
   master->printMessage("Hello world!\n");
 }

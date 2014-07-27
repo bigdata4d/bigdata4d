@@ -21,18 +21,18 @@
  * along with BigData4D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SIMPLEAPP
-#define SIMPLEAPP
+#ifndef SIMPLEAPPLICATION
+#define SIMPLEAPPLICATION
 
 #include "Application.h"
 
 class Master;
 
-class Simpleapp : public Application
+class SimpleApplication : public Application
 {
   public:
-    Simpleapp(Master *, int, char **);
-    ~Simpleapp();
+    SimpleApplication(Master *, int, char **);
+    ~SimpleApplication();
 
     void exec();
 };

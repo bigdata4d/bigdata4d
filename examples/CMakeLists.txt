@@ -18,5 +18,5 @@ include_directories(${INCLUDE_DIRS} "../include")
 add_executable(helloworld helloworld/helloworld.cxx)
 target_link_libraries(helloworld bigdata4d ${LIBS})
 
-add_executable(simplemodel simplemodel/simplemodel.cxx simplemodel/Simpleapp.cxx)
-target_link_libraries(simplemodel bigdata4d ${LIBS})
+add_executable(simple simple/simple.cxx simple/SimpleApplication.cxx)
+target_link_libraries(simple bigdata4d ${LIBS})
