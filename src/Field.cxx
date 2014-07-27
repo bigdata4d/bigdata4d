@@ -72,3 +72,11 @@ Field Field::operator+ (const Field &fieldin) const
 
   return fieldout;
 }
+
+void Field::addFields(const Field &f1, const Field &f2, const Field &f3)
+{
+  for(int i=0; i<data.size(); ++i)
+  {
+    data[i] = f1.data[i] + f2.data[i] + f3.data[i];
+  }
+} 
