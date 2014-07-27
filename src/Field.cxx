@@ -22,16 +22,18 @@
  */
 
 #include <vector>
+#include <sstream>
 #include "Field.h"
 #include "Master.h"
 #include "Grid.h"
 
 #define restrict RESTRICTKEYWORD
 
-Field::Field(Master &masterin, Grid &gridin)
+Field::Field(Master &masterin, Grid &gridin, const std::string namein)
 {
   master = &masterin;
   grid = &gridin;
+  name = namein;
 
   try
   {
@@ -43,12 +45,16 @@ Field::Field(Master &masterin, Grid &gridin)
     throw 1;
   }
 
-  master->printMessage("Constructed Field\n");
+  std::ostringstream message;
+  message << "Constructing Field " << name << "\n";
+  master->printMessage(message.str());
 }
 
 Field::~Field()
 {
-  master->printMessage("Destructed Field\n");
+  std::ostringstream message;
+  message << "Destructed Field " << name << "\n";
+  master->printMessage(message.str());
 }
 
 // overloaded operators
@@ -56,8 +62,13 @@ Field::Field(const Field &fieldin)
 {
   master = fieldin.master;
   grid = fieldin.grid;
+  name = "copy of " + fieldin.name;
 
   data = fieldin.data;
+
+  std::ostringstream message;
+  message << "Constructing Field " << name << "\n";
+  master->printMessage(message.str());
 }
 
 namespace

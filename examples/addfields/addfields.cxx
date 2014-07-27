@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
     Master master;
     Grid grid(master, 2, 2, 2);
 
-    Field a(master, grid);
-    Field b(master, grid);
+    Field a(master, grid, "a");
+    Field b(master, grid, "b");
 
     // fill field with random numbers
     for(auto &i : a.data)
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
       i = std::rand() % 10;
 
     // test the copy operator
-    Field aa(master, grid);
+    Field aa(master, grid, "aa");
     aa = a;
 
     // test the assignment operator
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     // test the addition operator
     Field d = a + b + c;
 
-    Field e(master,grid);
+    Field e(master, grid, "e");
     e = a + b + c;
 
     for(int i=0; i<a.data.size(); ++i)

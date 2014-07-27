@@ -32,7 +32,7 @@ class Grid;
 class Field
 {
   public:
-    Field(Master &, Grid &);
+    Field(Master &, Grid &, const std::string);
     virtual ~Field();
 
     Field(const Field &);
@@ -46,5 +46,6 @@ class Field
   protected:
     Master *master;
     Grid *grid;
+    std::string name;
 };
 #endif
