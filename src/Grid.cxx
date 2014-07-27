@@ -24,7 +24,7 @@
 #include "Grid.h"
 #include "Master.h"
 
-Grid::Grid(Master &masterin, int itotin, int jtotin, int ktotin)
+Grid::Grid(Master &masterin, long itotin, long jtotin, long ktotin)
 {
   master = &masterin;
 
@@ -41,7 +41,7 @@ Grid::~Grid()
   master->printMessage("Destructed Grid\n");
 }
 
-int Grid::getntot()
+long Grid::getntot()
 {
   return ntot;
 }

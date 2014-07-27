@@ -29,17 +29,17 @@ class Master;
 class Grid
 {
   public:
-    Grid(Master &, int, int, int);
+    Grid(Master &, long, long, long);
     virtual ~Grid();
 
-    int getntot();
+    long getntot();
 
   protected:
     Master *master;
 
-    int itot;
-    int jtot;
-    int ktot;
-    int ntot;
+    long itot;
+    long jtot;
+    long ktot;
+    long ntot;
 };
 #endif

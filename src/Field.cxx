@@ -33,7 +33,15 @@ Field::Field(Master &masterin, Grid &gridin)
   master = &masterin;
   grid = &gridin;
 
-  data.resize(grid->getntot());
+  try
+  {
+    data.resize(grid->getntot());
+  }
+  catch (...)
+  {
+    master->printError("Bad allocation\n");
+    throw 1;
+  }
 
   master->printMessage("Constructed Field\n");
 }
