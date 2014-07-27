@@ -20,3 +20,6 @@ target_link_libraries(helloworld bigdata4d ${LIBS})
 
 add_executable(simple simple/simple.cxx simple/SimpleApplication.cxx)
 target_link_libraries(simple bigdata4d ${LIBS})
+
+add_executable(addfields addfields/addfields.cxx)
+target_link_libraries(addfields bigdata4d ${LIBS})
