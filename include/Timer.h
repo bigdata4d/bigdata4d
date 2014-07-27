@@ -24,15 +24,22 @@
 #ifndef TIMER
 #define TIMER
 
+#include <vector>
+
 class Master;
 
 class Timer
 {
   public:
-    Timer(Master *);
+    Timer(Master &);
     virtual ~Timer();
+
+    void start();
+    void sample();
+    void end();
 
   protected:
     Master *master;
+    std::vector<double> samples;
 };
 #endif

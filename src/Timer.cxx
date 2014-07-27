@@ -24,11 +24,28 @@
 #include "Timer.h"
 #include "Master.h"
 
-Timer::Timer(Master *masterin)
+Timer::Timer(Master &masterin)
 {
-  master = masterin;
+  master = &masterin;
 }
 
 Timer::~Timer()
 {
+}
+
+void Timer::start()
+{
+  master->printMessage("Start timer");
+  samples.push_back(master->getTime());
+}
+
+void Timer::end()
+{
+  samples.push_back(master->getTime());
+  master->printMessage("End timer");
+}
+
+void Timer::sample()
+{
+  samples.push_back(master->getTime());
 }
