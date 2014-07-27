@@ -54,7 +54,7 @@ Field::Field(const Field &fieldin)
 
 namespace
 {
-  inline void copyvec(int * restrict out, int * restrict in, int size)
+  inline void copyvec(int * const restrict out, const int * const restrict in, const int size)
   {
     for(int i=0; i<size; ++i)
       out[i] = in[i];
@@ -67,7 +67,7 @@ Field& Field::operator= (const Field &fieldin)
   // this->data = fieldin.data;
 
   // vectorized copy
-  copyvec((int*)&data[0], (int*)&fieldin.data[0], data.size());
+  copyvec(&data[0], &fieldin.data[0], data.size());
 
   return *this;
 }
@@ -82,7 +82,7 @@ Field& Field::operator+=(const Field &fieldin)
 
 namespace
 {
-  inline void addvecs(int * restrict out, int * restrict a, int * restrict b, int size)
+  inline void addvecs(int * const restrict out, const int * const restrict a, const int * const restrict b, int size)
   {
     for(int i=0; i<size; ++i)
       out[i] = a[i] + b[i];
@@ -99,7 +99,7 @@ Field Field::operator+ (const Field &fieldin) const
   //   fieldout.data[i] = data[i] + fieldin.data[i];
 
   // use vectorized addition
-  addvecs(&fieldout.data[0], (int*)&data[0], (int*)&fieldin.data[0], data.size());
+  addvecs(&fieldout.data[0], &data[0], &fieldin.data[0], data.size());
 
   return fieldout;
 }
