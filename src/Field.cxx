@@ -26,6 +26,8 @@
 #include "Master.h"
 #include "Grid.h"
 
+#define restrict RESTRICTKEYWORD
+
 Field::Field(Master &masterin, Grid &gridin)
 {
   master = &masterin;
@@ -50,9 +52,23 @@ Field::Field(const Field &fieldin)
   data = fieldin.data;
 }
 
+namespace
+{
+  inline void copyvec(int * restrict out, int * restrict in, int size)
+  {
+    for(int i=0; i<size; ++i)
+      out[i] = in[i];
+  }
+}
+
 Field& Field::operator= (const Field &fieldin)
 {
+  // non-vectorized copy
   this->data = fieldin.data;
+
+  // vectorized copy
+  // copyvec((int*)data[0], (int*)&fieldin.data[0], data.size());
+
   return *this;
 }
 
@@ -64,19 +80,26 @@ Field& Field::operator+=(const Field &fieldin)
   return *this;
 }
 
+namespace
+{
+  inline void addvecs(int * restrict out, int * restrict a, int * restrict b, int size)
+  {
+    for(int i=0; i<size; ++i)
+      out[i] = a[i] + b[i];
+  }
+}
+
 Field Field::operator+ (const Field &fieldin) const
 {
+  // copy the field
   Field fieldout(*this);
-  for(int i=0; i<data.size(); ++i)
-    fieldout.data[i] = data[i] + fieldin.data[i];
+
+  // use non-vectorized addition
+  // for(int i=0; i<data.size(); ++i)
+  //   fieldout.data[i] = data[i] + fieldin.data[i];
+
+  // use vectorized addition
+  addvecs(&fieldout.data[0], (int*)&data[0], (int*)&fieldin.data[0], data.size());
 
   return fieldout;
 }
-
-void Field::addFields(const Field &f1, const Field &f2, const Field &f3)
-{
-  for(int i=0; i<data.size(); ++i)
-  {
-    data[i] = f1.data[i] + f2.data[i] + f3.data[i];
-  }
-} 

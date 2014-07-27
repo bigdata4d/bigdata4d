@@ -38,13 +38,9 @@ int main(int argc, char *argv[])
     Field e(master,grid);
     e = a + b + c;
 
-    Field f(master,grid);
-    f.addFields(a, b, c);
-
-
     for(int i=0; i<a.data.size(); ++i)
-      std::printf("CvH, %d: %d, %d, %d, %d, %d, %d, %d, %d\n",
-          i, a.data[i], aa.data[i], b.data[i], bb.data[i], c.data[i], d.data[i], e.data[i], f.data[i]);
+      std::printf("CvH, %d: %d, %d, %d, %d, %d, %d, %d\n",
+          i, a.data[i], aa.data[i], b.data[i], bb.data[i], c.data[i], d.data[i], e.data[i]);
   }
 
   catch (...)

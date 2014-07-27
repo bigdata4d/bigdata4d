@@ -41,8 +41,6 @@ class Field
 
     Field operator+ (const Field &) const;
 
-    void addFields(const Field &, const Field &, const Field &);
-
     std::vector<int> data;
 
   protected:
