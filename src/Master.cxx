@@ -213,7 +213,7 @@ int Master::checkError(int n)
   return 0;
 }
 
-double Master::gettime()
+double Master::getTime()
 {
 #ifdef USEMPI
   return MPI_Wtime();

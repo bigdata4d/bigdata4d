@@ -44,7 +44,7 @@ class Master
     void printMessage(std::string);
     void printError  (std::string);
 
-    double gettime();
+    double getTime();
 
     int mpiid;
 

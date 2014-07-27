@@ -29,7 +29,7 @@ class Master;
 class Application
 {
   public:
-    Application(Master *, int, char **);
+    Application(Master &, int, char **);
     virtual ~Application();
 
     // disable the assignment and copy constructors

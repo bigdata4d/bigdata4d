@@ -24,7 +24,7 @@
 #include "SimpleApplication.h"
 #include "Master.h"
 
-SimpleApplication::SimpleApplication(Master *masterin, int argc, char *argv[]) : Application(masterin, argc, argv)
+SimpleApplication::SimpleApplication(Master &masterin, int argc, char *argv[]) : Application(masterin, argc, argv)
 {
   /*
   // process the command line options

@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
   try
   {
     Master master;
-    SimpleApplication application(&master, argc, argv);
+    SimpleApplication application(master, argc, argv);
 
     application.exec();
   }
