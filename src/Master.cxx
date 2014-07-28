@@ -28,6 +28,7 @@
 #endif
 
 #include <iostream>
+#include <sstream>
 #include "Master.h"
 
 #ifdef USEMPI
@@ -67,9 +68,9 @@ Master::Master()
       throw 1;
     }
 
-    char message[1024];
-    std::sprintf(message, "Starting Master on %d process(es)\n", nprocs);
-    printMessage(message);
+    std::ostringstream message;
+    message << "Starting Master on " << nprocs << " process(es)\n";
+    printMessage(message.str());
   }
 
   catch (...)
@@ -87,9 +88,9 @@ Master::Master()
   mpiid = 0;
   nprocs = 1;
 
-  char message[1024];
-  std::sprintf(message, "Starting Master on %d process(es)\n", nprocs);
-  printMessage(message);
+  std::ostringstream message;
+  message << "Starting Master on " << nprocs << " process(es)\n";
+  printMessage(message.str());
 }
 #endif
 
@@ -97,9 +98,9 @@ Master::~Master()
 {
   cleanup();
 
-  char message[1024];
-  std::sprintf(message, "Finished Master on %d process(es)\n", nprocs);
-  printMessage(message);
+  std::ostringstream message;
+  message << "Finished Master on " << nprocs << " process(es)\n";
+  printMessage(message.str());
 }
 
 void Master::cleanup()
@@ -205,7 +206,11 @@ int Master::checkError(int n)
   if(n != MPI_SUCCESS)
   {
     MPI_Error_string(n, errbuffer, &errlen);
-    std::printf("ERROR MPI %s\n", errbuffer);
+
+    std::ostringstream message;
+    message << "ERROR MPI "<< std::string(errbuffer) << "\n";
+    printMessage(message.str());
+
     return 1;
   }
 #endif

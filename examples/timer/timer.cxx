@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
 #include "Master.h"
 #include "Grid.h"
@@ -28,7 +29,11 @@ int main(int argc, char *argv[])
       a += b;
     timer.end();
 
-    std::printf("Elapsed time: %E (s)\n", timer.getTotal());
+    std::ostringstream message;
+    message << "Elapsed time: "
+            << std::setprecision(5) << timer.getTotal()
+            << " (s)\n";
+    master.printMessage(message.str());
   }
 
   catch (...)
