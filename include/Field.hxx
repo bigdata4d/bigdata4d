@@ -76,7 +76,8 @@ Field<T>::Field(const Field &fieldin)
 
 namespace
 {
-  inline void copyvec(int * const restrict out, const int * const restrict in, const int size)
+  template<typename T>
+  inline void copyvec(T * const restrict out, const T * const restrict in, const int size)
   {
     for(int i=0; i<size; ++i)
       out[i] = in[i];
@@ -97,7 +98,8 @@ Field<T>& Field<T>::operator= (const Field &fieldin)
 
 namespace
 {
-  inline void copyaddvec(int * const restrict out, const int * const restrict in, const int size)
+  template<typename T>
+  inline void copyaddvec(T * const restrict out, const T * const restrict in, const int size)
   {
     for(int i=0; i<size; ++i)
       out[i] += in[i];
@@ -117,7 +119,8 @@ Field<T>& Field<T>::operator+=(const Field &fieldin)
 
 namespace
 {
-  inline void addvecs(int * const restrict out, const int * const restrict a, const int * const restrict b, int size)
+  template<typename T>
+  inline void addvecs(T * const restrict out, const T * const restrict a, const T * const restrict b, int size)
   {
     for(int i=0; i<size; ++i)
       out[i] = a[i] + b[i];
@@ -125,7 +128,7 @@ namespace
 }
 
 template<class T>
-Field<T> Field<T>::operator+ (const Field &fieldin) const
+Field<T> Field<T>::operator+ (const Field<T> &fieldin) const
 {
   // copy the field
   Field<T> fieldout(*this);

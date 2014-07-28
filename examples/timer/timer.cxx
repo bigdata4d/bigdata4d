@@ -10,10 +10,10 @@ int main(int argc, char *argv[])
   try
   {
     Master master;
-    Grid grid(master, 128, 128, 128);
+    Grid grid(master, 100, 100, 100);
 
-    Field<int> a(master, grid, "a");
-    Field<int> b(master, grid, "b");
+    Field<double> a(master, grid, "a");
+    Field<double> b(master, grid, "b");
 
     // fill field with random numbers
     for(auto &i : a.data)
