@@ -29,7 +29,8 @@
 
 #define restrict RESTRICTKEYWORD
 
-Field::Field(Master &masterin, Grid &gridin, const std::string namein)
+template<class T>
+Field<T>::Field(Master &masterin, Grid &gridin, const std::string namein)
 {
   master = &masterin;
   grid = &gridin;
@@ -50,7 +51,8 @@ Field::Field(Master &masterin, Grid &gridin, const std::string namein)
   master->printMessage(message.str());
 }
 
-Field::~Field()
+template<class T>
+Field<T>::~Field()
 {
   std::ostringstream message;
   message << "Destructed Field " << name << "\n";
@@ -58,7 +60,8 @@ Field::~Field()
 }
 
 // overloaded operators
-Field::Field(const Field &fieldin)
+template<class T>
+Field<T>::Field(const Field &fieldin)
 {
   master = fieldin.master;
   grid = fieldin.grid;
@@ -80,7 +83,8 @@ namespace
   }
 }
 
-Field& Field::operator= (const Field &fieldin)
+template<class T>
+Field<T>& Field<T>::operator= (const Field &fieldin)
 {
   // non-vectorized copy
   // this->data = fieldin.data;
@@ -100,7 +104,8 @@ namespace
   }
 }
 
-Field& Field::operator+=(const Field &fieldin)
+template<class T>
+Field<T>& Field<T>::operator+=(const Field &fieldin)
 {
   // for(int i=0; i<this->data.size(); ++i)
   //   this->data[i] += fieldin.data[i];
@@ -119,10 +124,11 @@ namespace
   }
 }
 
-Field Field::operator+ (const Field &fieldin) const
+template<class T>
+Field<T> Field<T>::operator+ (const Field &fieldin) const
 {
   // copy the field
-  Field fieldout(*this);
+  Field<T> fieldout(*this);
 
   // use non-vectorized addition
   // for(int i=0; i<data.size(); ++i)

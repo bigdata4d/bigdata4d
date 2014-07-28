@@ -29,6 +29,7 @@
 class Master;
 class Grid;
 
+template<class T>
 class Field
 {
   public:
@@ -36,16 +37,18 @@ class Field
     virtual ~Field();
 
     Field(const Field &);
-    Field & operator= (const Field &);
-    Field & operator+=(const Field &);
+    Field<T> & operator= (const Field &);
+    Field<T> & operator+=(const Field &);
 
     Field operator+ (const Field &) const;
 
-    std::vector<int> data;
+    std::vector<T> data;
 
   protected:
     Master *master;
     Grid *grid;
     std::string name;
 };
+
+#include "Field.hxx"
 #endif

@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
     Master master;
     Grid grid(master, 128, 128, 128);
 
-    Field a(master, grid, "a");
-    Field b(master, grid, "b");
+    Field<int> a(master, grid, "a");
+    Field<int> b(master, grid, "b");
 
     // fill field with random numbers
     for(auto &i : a.data)
