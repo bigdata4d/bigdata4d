@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     timer1.end();
 
     float *a_gpu, *b_gpu;
-    prepareCUDA(&a_gpu, &b_gpu, &a.data[0], &b.data[0]);
+    prepareCUDA(&a_gpu, &b_gpu, &b.data[0], &b.data[0]);
 
     Timer timer2(master);
     timer2.start();

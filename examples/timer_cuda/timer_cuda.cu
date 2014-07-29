@@ -17,14 +17,12 @@ void prepareCUDA(float **a_gpu, float **b_gpu, float *a, float *b)
 
   cudaMemcpy(*a_gpu, a, size, cudaMemcpyHostToDevice);
   cudaMemcpy(*b_gpu, b, size, cudaMemcpyHostToDevice);
-
-  cudaMemcpy(a, *a_gpu, size, cudaMemcpyDeviceToHost);
 }
 
 void testCUDA(float *a_gpu, float *b_gpu)
 {
-  dim3 block(20,20,1);
-  dim3 grid(100/20,100/20,100);
+  dim3 grid(100,100,100);
+  dim3 block(1,1,1);
 
   compadd_kernel<<<grid, block>>>(a_gpu, b_gpu);
 }
