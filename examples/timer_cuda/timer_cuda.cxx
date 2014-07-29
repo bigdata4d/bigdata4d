@@ -7,7 +7,7 @@
 #include "Timer.h"
 
 // CUDA functions
-void hello();
+void hello(Master &);
 
 int main(int argc, char *argv[])
 {
@@ -32,8 +32,7 @@ int main(int argc, char *argv[])
       a += b;
     timer.end();
 
-    hello();
-    
+    hello(master);
 
     std::ostringstream message;
     message << "Elapsed time: "

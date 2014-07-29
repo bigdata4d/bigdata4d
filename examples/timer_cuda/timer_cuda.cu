@@ -1,4 +1,6 @@
-void hello()
+#include "Master.h"
+
+void hello(Master &master)
 {
-  return;
+  master.printMessage("Hello world!");
 }
