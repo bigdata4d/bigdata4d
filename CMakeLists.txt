@@ -24,7 +24,7 @@ else()
 endif()
 
 # start the project only after the system specific settings are loaded
-project(bigdata4d CXX)
+project(bigdata4d)
 
 # enable or disable MPI, enabled by default
 set(USEMPI TRUE CACHE BOOL "Choose to enable MPI or not.")

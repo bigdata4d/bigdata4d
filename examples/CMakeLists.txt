@@ -28,6 +28,6 @@ add_executable(timer timer/timer.cxx)
 target_link_libraries(timer bigdata4d ${LIBS})
 
 if(USECUDA)
-  cuda_add_executable(timer_cuda timer_cuda/timer_cuda.cxx timer_cuda/timer_cuda.cu)
+  cuda_add_executable(timer_cuda timer_cuda/timer_cuda.cu timer_cuda/timer_cuda.cxx)
   target_link_libraries(timer_cuda bigdata4d ${LIBS})
 endif()

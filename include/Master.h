@@ -37,8 +37,8 @@ class Master
     ~Master();
 
     // disable the assignment and copy constructors
-    Master(const Master &) = delete;
-    Master &operator=(const Master &) = delete;
+    // Master(const Master &) = delete;
+    // Master &operator=(const Master &) = delete;
 
     // int init();
     void printMessage(std::string);
