@@ -1,3 +1,5 @@
+#include <thrust/device_vector.h>
+#include <thrust/functional.h>
 #include <cstdio>
 
 __global__ void compadd_kernel(float * __restrict__ a, float * __restrict__ b)
@@ -45,4 +47,9 @@ void finishCUDA(float *a_gpu, float *b_gpu, float *a)
 
   cudaFree(a_gpu);
   cudaFree(b_gpu);
+}
+
+void testCUDA_thrust(thrust::device_vector<float> &a, thrust::device_vector<float> &b)
+{
+  thrust::transform(b.begin(), b.end(), a.begin(), a.begin(), thrust::plus<float>());
 }

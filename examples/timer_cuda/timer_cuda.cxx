@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
+#include <thrust/host_vector.h>
+#include <thrust/device_vector.h>
 #include "Master.h"
 #include "Grid.h"
 #include "Field.h"
@@ -11,6 +13,7 @@ extern void prepareCUDA(float **, float **, float *, float *);
 extern void testCUDA(float *, float *);
 extern void waitCUDA();
 extern void finishCUDA(float *, float *, float *);
+extern void testCUDA_thrust(thrust::device_vector<float> &, thrust::device_vector<float> &);
 
 int main(int argc, char *argv[])
 {
@@ -44,16 +47,31 @@ int main(int argc, char *argv[])
     waitCUDA();
     timer2.end();
 
-    std::ostringstream message;
-    message << "Elapsed time (s): "
-            << std::setprecision(5) << timer1.getTotal() << ", "
-            << std::setprecision(5) << timer2.getTotal() << "\n"
-            << "Speedup: " << timer1.getTotal() / timer2.getTotal() << "\n";
-    master.printMessage(message.str());
-
     Field<float> acuda(master, grid, "acuda");
 
     finishCUDA(a_gpu, b_gpu, &acuda.data[0]);
+
+    // THRUST
+    thrust::device_vector<float> athrust(b.data);
+    thrust::device_vector<float> bthrust(b.data);
+
+    Timer timer3(master);
+    timer3.start();
+    for(int n=0; n<100; ++n)
+      testCUDA_thrust(athrust, bthrust);
+    waitCUDA();
+    timer3.end();
+
+    thrust::host_vector<float> athrustout = athrust;
+
+    std::ostringstream message;
+    message << "Elapsed time (s): "
+            << std::setprecision(5) << timer1.getTotal() << ", "
+            << std::setprecision(5) << timer2.getTotal() << ", "
+            << std::setprecision(5) << timer3.getTotal() << "\n"
+            << "Speedup CUDA (no thrust): " << timer1.getTotal() / timer2.getTotal() << "\n"
+            << "Speedup CUDA (thrust)   : " << timer1.getTotal() / timer3.getTotal() << "\n";
+    master.printMessage(message.str());
 
     for(int n=3; n<a.data.size(); n+=384*384*20)
     {
@@ -61,7 +79,8 @@ int main(int argc, char *argv[])
       message << std::setw(8);
       message << n << " = {" 
         << std::setw(6) <<     a.data[n] << ", "
-        << std::setw(6) << acuda.data[n] << " }\n";
+        << std::setw(6) << acuda.data[n] << ", "
+        << std::setw(6) << athrustout[n] << " }\n";
       master.printMessage(message.str());
     }
   }
