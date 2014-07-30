@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
   try
   {
     Master master;
-    Grid grid(master, 10, 10, 10);
+    Grid grid(master, 384, 384, 384);
 
     Field<float> a(master, grid, "a");
 
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
     finishCUDA(a_gpu, b_gpu, &acuda.data[0]);
 
-    for(int n=3; n<a.data.size(); n+=10*10)
+    for(int n=3; n<a.data.size(); n+=384*384*20)
     {
       std::ostringstream message;
       message << std::setw(8);

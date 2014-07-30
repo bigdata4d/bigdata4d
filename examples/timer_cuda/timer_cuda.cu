@@ -1,21 +1,18 @@
 #include <cstdio>
 
-__global__ void compadd_kernel(float *a, float *b)
+__global__ void compadd_kernel(float * __restrict__ a, float * __restrict__ b)
 {
   int i = blockIdx.x*blockDim.x + threadIdx.x;
   int j = blockIdx.y*blockDim.y + threadIdx.y;
+  int k = blockIdx.z;
 
-  int ij = i + j*10;
-  a[ij] += b[ij];
-
-  // int k = blockIdx.z;
-  // int ijk = i + j*10 + k*100;
-  // a[ijk] += b[ijk];
+  int ijk = i + j*384 + k*384*384;
+  a[ijk] += b[ijk];
 }
 
 void prepareCUDA(float **a_gpu, float **b_gpu, float *a, float *b)
 {
-  int size = 10*10*10*sizeof(float);
+  int size = 384*384*384*sizeof(float);
 
   cudaMalloc((void **)a_gpu, size);
   cudaMalloc((void **)b_gpu, size);
@@ -26,8 +23,11 @@ void prepareCUDA(float **a_gpu, float **b_gpu, float *a, float *b)
 
 void testCUDA(float *a_gpu, float *b_gpu)
 {
-  dim3 grid(10,100);
-  dim3 block(1,1);
+  const int blocki = 32;
+  const int blockj = 16;
+
+  dim3 grid(384/blocki,384/blockj,384);
+  dim3 block(blocki,blockj,1);
 
   compadd_kernel<<<grid, block>>>(a_gpu, b_gpu);
 }
@@ -39,7 +39,7 @@ void waitCUDA()
 
 void finishCUDA(float *a_gpu, float *b_gpu, float *a)
 {
-  int size = 10*10*10*sizeof(float);
+  int size = 384*384*384*sizeof(float);
 
   cudaMemcpy(a, a_gpu, size, cudaMemcpyDeviceToHost);
 
