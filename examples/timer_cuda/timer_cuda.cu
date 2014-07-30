@@ -2,14 +2,17 @@
 #include <thrust/functional.h>
 #include <cstdio>
 
-__global__ void compadd_kernel(float * __restrict__ a, float * __restrict__ b)
+__global__ void compadd_kernel(float * __restrict__ a, float * __restrict__ b, int n)
 {
   int i = blockIdx.x*blockDim.x + threadIdx.x;
   int j = blockIdx.y*blockDim.y + threadIdx.y;
   int k = blockIdx.z;
 
-  int ijk = i + j*384 + k*384*384;
-  a[ijk] += b[ijk];
+  if(i < 384 && j < 384 && k < 384)
+  {
+    int ijk = i + j*384 + k*384*384;
+    a[ijk] += b[ijk];
+  }
 }
 
 void prepareCUDA(float **a_gpu, float **b_gpu, float *a, float *b)
@@ -25,13 +28,13 @@ void prepareCUDA(float **a_gpu, float **b_gpu, float *a, float *b)
 
 void testCUDA(float *a_gpu, float *b_gpu)
 {
-  const int blocki = 32;
-  const int blockj = 16;
+  const int blocki = 256;
+  const int blockj = 1;
 
   dim3 grid(384/blocki,384/blockj,384);
   dim3 block(blocki,blockj,1);
 
-  compadd_kernel<<<grid, block>>>(a_gpu, b_gpu);
+  compadd_kernel<<<grid, block>>>(a_gpu, b_gpu, 384);
 }
 
 void waitCUDA()
