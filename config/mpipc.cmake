@@ -17,7 +17,7 @@ set(USER_CXX_FLAGS_DEBUG "-O0 -g -Wall -Wno-unknown-pragmas")
 
 if(USECUDA)
   set(CUDA_PROPAGATE_HOST_FLAGS OFF)
-  set(CUDA_NVCC_FLAGS "-arch=sm_30")
+  set(CUDA_NVCC_FLAGS "-arch=sm_21")
 endif()
 
 add_definitions(-DRESTRICTKEYWORD=__restrict__)
