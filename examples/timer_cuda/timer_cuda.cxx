@@ -109,7 +109,17 @@ int main(int argc, char *argv[])
         master.printMessage(message.str());
       }
     }
+
+    // catch std::exceptions
+    catch (std::exception &e)
+    {
+      std::ostringstream message;
+      message << "Exception caught: " << e.what() << "\n";
+      master.printError(message.str());
+      throw 1;
+    }
     
+    // catch unknown errors
     catch (...)
     {
       master.printError("Oops! An unknown error has occured!\n");

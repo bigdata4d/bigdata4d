@@ -85,5 +85,3 @@ void finishCUDA_cublas(float *a_gpu, float *b_gpu, float *a)
   cudaFree(a_gpu);
   cudaFree(b_gpu);
 }
-
-
