@@ -25,8 +25,8 @@
 #include "Master.h"
 
 Timer::Timer(Master &masterin)
+  : master(masterin)
 {
-  master = &masterin;
 }
 
 Timer::~Timer()
@@ -35,19 +35,19 @@ Timer::~Timer()
 
 void Timer::start()
 {
-  master->printMessage("Start timer\n");
-  samples.push_back(master->getTime());
+  master.printMessage("Start timer\n");
+  samples.push_back(master.getTime());
 }
 
 void Timer::end()
 {
-  samples.push_back(master->getTime());
-  master->printMessage("End timer\n");
+  samples.push_back(master.getTime());
+  master.printMessage("End timer\n");
 }
 
 void Timer::sample()
 {
-  samples.push_back(master->getTime());
+  samples.push_back(master.getTime());
 }
 
 double Timer::getTotal()

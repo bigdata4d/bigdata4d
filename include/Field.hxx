@@ -31,24 +31,24 @@
 
 template<class T>
 Field<T>::Field(Master &masterin, Grid &gridin, const std::string namein)
+  : master(masterin),
+    grid(gridin)
 {
-  master = &masterin;
-  grid = &gridin;
   name = namein;
 
   try
   {
-    data.resize(grid->getntot());
+    data.resize(grid.getntot());
   }
   catch (...)
   {
-    master->printError("Bad allocation\n");
+    master.printError("Bad allocation\n");
     throw 1;
   }
 
   std::ostringstream message;
   message << "Constructing Field " << name << "\n";
-  master->printMessage(message.str());
+  master.printMessage(message.str());
 }
 
 template<class T>
@@ -56,22 +56,22 @@ Field<T>::~Field()
 {
   std::ostringstream message;
   message << "Destructed Field " << name << "\n";
-  master->printMessage(message.str());
+  master.printMessage(message.str());
 }
 
 // overloaded operators
 template<class T>
 Field<T>::Field(const Field &fieldin)
+  : master(fieldin.master),
+    grid(fieldin.grid)
 {
-  master = fieldin.master;
-  grid = fieldin.grid;
   name = "copy of " + fieldin.name;
 
   data = fieldin.data;
 
   std::ostringstream message;
   message << "Constructing Field " << name << "\n";
-  master->printMessage(message.str());
+  master.printMessage(message.str());
 }
 
 namespace

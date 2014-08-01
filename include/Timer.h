@@ -41,7 +41,7 @@ class Timer
     double getTotal();
 
   protected:
-    Master *master;
+    Master &master;
     std::vector<double> samples;
 };
 #endif

@@ -39,6 +39,6 @@ class Application
     virtual void exec() = 0;
 
   protected:
-    Master *master;
+    Master &master;
 };
 #endif

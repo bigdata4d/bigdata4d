@@ -45,8 +45,8 @@ class Field
     std::vector<T> data;
 
   protected:
-    Master *master;
-    Grid *grid;
+    Master &master;
+    Grid &grid;
     std::string name;
 };
 

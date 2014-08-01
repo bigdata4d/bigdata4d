@@ -35,7 +35,7 @@ class Grid
     long getntot();
 
   protected:
-    Master *master;
+    Master &master;
 
     long itot;
     long jtot;

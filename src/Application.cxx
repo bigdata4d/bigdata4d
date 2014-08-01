@@ -25,8 +25,8 @@
 #include "Master.h"
 
 Application::Application(Master &masterin, int argc, char *argv[])
+  : master(masterin)
 {
-  master = &masterin;
 }
 
 Application::~Application()
