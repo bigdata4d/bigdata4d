@@ -29,7 +29,7 @@ class Master;
 class Grid
 {
   public:
-    Grid(Master &, long, long, long);
+    Grid(Master &, long, long, long, long);
     virtual ~Grid();
 
     long getntot();
@@ -37,9 +37,11 @@ class Grid
   protected:
     Master &master;
 
-    long itot;
-    long jtot;
-    long ktot;
-    long ntot;
+    const long itot;
+    const long jtot;
+    const long ktot;
+    const long ntot;
 };
+
+Grid createGrid(Master &, long, long, long);
 #endif

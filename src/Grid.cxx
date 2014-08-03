@@ -24,14 +24,13 @@
 #include "Grid.h"
 #include "Master.h"
 
-Grid::Grid(Master &masterin, long itotin, long jtotin, long ktotin) 
-  : master(masterin)
+Grid::Grid(Master &masterin, long itotin, long jtotin, long ktotin, long ntotin) :
+  master(masterin),
+  itot(itotin),
+  jtot(jtotin),
+  ktot(ktotin),
+  ntot(ntotin)
 {
-  itot = itotin;
-  jtot = jtotin;
-  ktot = ktotin;
-  ntot = itot*jtot*ktot;
-
   master.printMessage("Constructed Grid\n");
 }
 
@@ -43,4 +42,11 @@ Grid::~Grid()
 long Grid::getntot()
 {
   return ntot;
+}
+
+Grid createGrid(Master &masterin, long itotin, long jtotin, long ktotin)
+{
+  int ntot = itotin*jtotin*ktotin;
+  return Grid(masterin, itotin, jtotin, ktotin, ntot);
+
 }
