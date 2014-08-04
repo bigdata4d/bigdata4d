@@ -21,15 +21,15 @@
  * along with BigData4D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <vector>
+#include <sstream>
 #include "Grid.h"
 #include "Master.h"
 
-Grid::Grid(Master &masterin, long itotin, long jtotin, long ktotin, long ntotin) :
+Grid::Grid(Master &masterin, GridDims &dimsin, GridVars &varsin) :
   master(masterin),
-  itot(itotin),
-  jtot(jtotin),
-  ktot(ktotin),
-  ntot(ntotin)
+  dims(dimsin),
+  vars(varsin)
 {
   master.printMessage("Constructed Grid\n");
 }
@@ -41,12 +41,26 @@ Grid::~Grid()
 
 long Grid::getntot()
 {
-  return ntot;
+  return dims.ntot;
 }
 
 Grid createGrid(Master &masterin, long itotin, long jtotin, long ktotin)
 {
   int ntot = itotin*jtotin*ktotin;
-  return Grid(masterin, itotin, jtotin, ktotin, ntot);
 
+  GridDims dims;
+  dims.itot = itotin;
+  dims.jtot = jtotin;
+  dims.ktot = ktotin;
+  dims.ntot = ntot;
+
+  GridVars vars;
+  for(int i=0; i<dims.itot; ++i) {
+    vars.x.push_back((0.5+i)/dims.itot); }
+  for(int j=0; j<dims.jtot; ++j) {
+    vars.y.push_back((0.5+j)/dims.jtot); }
+  for(int k=0; k<dims.ktot; ++k) {
+    vars.z.push_back((0.5+k)/dims.ktot); }
+  
+  return Grid(masterin, dims, vars);
 }

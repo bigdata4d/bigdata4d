@@ -24,23 +24,37 @@
 #ifndef GRID
 #define GRID
 
+#include <vector>
+
 class Master;
+
+struct GridDims
+{
+  long itot;
+  long jtot;
+  long ktot;
+  long ntot;
+};
+
+struct GridVars
+{
+  std::vector<double> x;
+  std::vector<double> y;
+  std::vector<double> z;
+};
 
 class Grid
 {
   public:
-    Grid(Master &, long, long, long, long);
+    Grid(Master &, GridDims &, GridVars &);
     virtual ~Grid();
 
     long getntot();
 
   protected:
     Master &master;
-
-    const long itot;
-    const long jtot;
-    const long ktot;
-    const long ntot;
+    const GridDims dims;
+    const GridVars vars;
 };
 
 Grid createGrid(Master &, long, long, long);
