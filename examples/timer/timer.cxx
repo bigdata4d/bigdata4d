@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
   try
   {
     Master master;
-    Grid<double> grid = createGrid<double>(master, 100, 100, 100);
+    auto grid = createGrid<double>(master, 100, 100, 100);
 
     Field<double> a(master, grid, "a");
     Field<double> b(master, grid, "b");
