@@ -58,4 +58,6 @@ class Grid
 };
 
 Grid createGrid(Master &, long, long, long);
+
+#include "Grid.hxx"
 #endif
