@@ -30,7 +30,7 @@
 #define restrict RESTRICTKEYWORD
 
 template<class T>
-Field<T>::Field(Master &masterin, Grid &gridin, const std::string namein)
+Field<T>::Field(Master &masterin, Grid<T> &gridin, const std::string namein)
   : master(masterin),
     grid(gridin)
 {

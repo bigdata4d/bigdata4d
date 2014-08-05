@@ -36,17 +36,19 @@ struct GridDims
   long ntot;
 };
 
+template<class T>
 struct GridVars
 {
-  std::vector<double> x;
-  std::vector<double> y;
-  std::vector<double> z;
+  std::vector<T> x;
+  std::vector<T> y;
+  std::vector<T> z;
 };
 
+template<class T>
 class Grid
 {
   public:
-    Grid(Master &, GridDims &, GridVars &);
+    Grid(Master &, GridDims &, GridVars<T> &);
     virtual ~Grid();
 
     long getntot();
@@ -54,10 +56,11 @@ class Grid
   protected:
     Master &master;
     const GridDims dims;
-    const GridVars vars;
+    const GridVars<T> vars;
 };
 
-Grid createGrid(Master &, long, long, long);
+template<class T>
+Grid<T> createGrid(Master &, long, long, long);
 
 #include "Grid.hxx"
 #endif

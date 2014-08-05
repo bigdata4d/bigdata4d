@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
   try
   {
     Master master;
-    Grid grid = createGrid(master, 1, 1, 10);
+    Grid<double> grid = createGrid<double>(master, 1, 1, 10);
 
     Field<double> a(master, grid, "a");
     Field<double> b(master, grid, "b");

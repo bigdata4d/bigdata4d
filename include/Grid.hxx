@@ -26,7 +26,8 @@
 #include "Grid.h"
 #include "Master.h"
 
-Grid::Grid(Master &masterin, GridDims &dimsin, GridVars &varsin) :
+template<class T>
+Grid<T>::Grid(Master &masterin, GridDims &dimsin, GridVars<T> &varsin) :
   master(masterin),
   dims(dimsin),
   vars(varsin)
@@ -34,17 +35,20 @@ Grid::Grid(Master &masterin, GridDims &dimsin, GridVars &varsin) :
   master.printMessage("Constructed Grid\n");
 }
 
-Grid::~Grid()
+template<class T>
+Grid<T>::~Grid()
 {
   master.printMessage("Destructed Grid\n");
 }
 
-long Grid::getntot()
+template<class T>
+long Grid<T>::getntot()
 {
   return dims.ntot;
 }
 
-Grid createGrid(Master &masterin, long itotin, long jtotin, long ktotin)
+template<class T>
+Grid<T> createGrid(Master &masterin, long itotin, long jtotin, long ktotin)
 {
   int ntot = itotin*jtotin*ktotin;
 
@@ -54,7 +58,7 @@ Grid createGrid(Master &masterin, long itotin, long jtotin, long ktotin)
   dims.ktot = ktotin;
   dims.ntot = ntot;
 
-  GridVars vars;
+  GridVars<T> vars;
   for(int i=0; i<dims.itot; ++i) {
     vars.x.push_back((0.5+i)/dims.itot); }
   for(int j=0; j<dims.jtot; ++j) {
@@ -62,5 +66,5 @@ Grid createGrid(Master &masterin, long itotin, long jtotin, long ktotin)
   for(int k=0; k<dims.ktot; ++k) {
     vars.z.push_back((0.5+k)/dims.ktot); }
   
-  return Grid(masterin, dims, vars);
+  return Grid<T>(masterin, dims, vars);
 }

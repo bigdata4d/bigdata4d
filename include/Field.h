@@ -25,15 +25,15 @@
 #define FIELD
 
 #include <vector>
+#include "Grid.h"
 
 class Master;
-class Grid;
 
 template<class T>
 class Field
 {
   public:
-    Field(Master &, Grid &, const std::string);
+    Field(Master &, Grid<T> &, const std::string);
     virtual ~Field();
 
     Field(const Field &);
@@ -46,7 +46,7 @@ class Field
 
   protected:
     Master &master;
-    Grid &grid;
+    Grid<T> &grid;
     std::string name;
 };
 
