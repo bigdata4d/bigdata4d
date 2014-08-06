@@ -27,17 +27,17 @@ int main(int argc, char *argv[])
     aa = a;
 
     // test the assignment operator
-    Field<double, double> bb(b);
+    auto bb(b);
 
     // test the compound addition operator
-    Field<double, double> c = a;
+    auto c = a;
     c += b;
 
     // test the addition operator
-    Field<double, double> d(master, grid, "d");
+    auto d = createField<double>(master, grid, "d");
     d = a + b + c;
 
-    Field<double, double> e = a + b + c;
+    auto e = a + b + c;
 
     for(int n=0; n<a.data.size(); ++n)
     {
