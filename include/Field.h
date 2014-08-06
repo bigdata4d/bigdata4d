@@ -50,5 +50,8 @@ class Field
     std::string name;
 };
 
+template<class T, class TG>
+Field<T,TG> createField(Master &, Grid<TG> &, const std::string);
+
 #include "Field.hxx"
 #endif

@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
     Master master;
     auto grid = createGrid<double>(master, 1, 1, 10);
 
-    Field<double, double> a(master, grid, "a");
-    Field<double, double> b(master, grid, "b");
+    auto a = createField<double>(master, grid, "a");
+    auto b = createField<double>(master, grid, "b");
 
     // fill field with random numbers
     for(auto &i : a.data)
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
       i = std::rand() % 10;
 
     // test the copy operator
-    Field<double, double> aa(master, grid, "aa");
+    auto aa = createField<double>(master, grid, "aa");
     aa = a;
 
     // test the assignment operator

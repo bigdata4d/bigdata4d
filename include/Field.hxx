@@ -142,3 +142,9 @@ Field<T,TG> Field<T,TG>::operator+ (const Field<T,TG> &fieldin) const
 
   return fieldout;
 }
+
+template<class T, class TG>
+Field<T,TG> createField(Master &masterin, Grid<TG> &gridin, const std::string namein)
+{
+  return Field<T,TG>(masterin, gridin, namein);
+}
