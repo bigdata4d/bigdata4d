@@ -29,16 +29,16 @@
 
 class Master;
 
-template<class T>
+template<class T, class TG>
 class Field
 {
   public:
-    Field(Master &, Grid<T> &, const std::string);
+    Field(Master &, Grid<TG> &, const std::string);
     virtual ~Field();
 
     Field(const Field &);
-    Field<T> & operator= (const Field &);
-    Field<T> & operator+=(const Field &);
+    Field<T,TG> & operator= (const Field &);
+    Field<T,TG> & operator+=(const Field &);
 
     Field operator+ (const Field &) const;
 
@@ -46,7 +46,7 @@ class Field
 
   protected:
     Master &master;
-    Grid<T> &grid;
+    Grid<TG> &grid;
     std::string name;
 };
 

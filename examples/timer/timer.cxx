@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
     Master master;
     auto grid = createGrid<double>(master, 100, 100, 100);
 
-    Field<double> a(master, grid, "a");
-    Field<double> b(master, grid, "b");
+    Field<double, double> a(master, grid, "a");
+    Field<double, double> b(master, grid, "b");
 
     // fill field with random numbers
     for(auto &i : a.data)
