@@ -30,6 +30,7 @@ Diffusion<T,TF>::Diffusion(Master &masterin, Grid<T> &gridin) :
   master(masterin),
   grid(gridin)
 {
+  master.printMessage("Constructed Diffusion\n");
 }
 
 template<class T, class TF>
@@ -103,4 +104,5 @@ void Diffusion<T,TF>::exec(Field<TF,T> &at, const Field<TF,T> &a)
 template<class T, class TF>
 Diffusion<T,TF>::~Diffusion()
 {
+  master.printMessage("Destructed Grid\n");
 }
