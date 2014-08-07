@@ -41,6 +41,9 @@ class Diffusion
   protected:
     Master &master;
     Grid<T> &grid;
+
+  private:
+    void execDiffusion(TF * const, const TF * const, const GridDims &);
 };
 
 #include "Diffusion.hxx"
