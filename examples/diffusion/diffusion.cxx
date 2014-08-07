@@ -4,6 +4,7 @@
 #include "Master.h"
 #include "Grid.h"
 #include "Field.h"
+#include "Diffusion.h"
 #include "Timer.h"
 
 int main(int argc, char *argv[])
@@ -17,9 +18,12 @@ int main(int argc, char *argv[])
 
     a.randomize(10);
 
+    Diffusion<double> diff(master, grid);
+
     Timer timer(master, "Diffusion (CPU)");
     timer.start();
-    for(int n=0; n<1000; ++n);
+    for(int n=0; n<1000; ++n)
+      diff.exec();
     timer.end();
   }
 
