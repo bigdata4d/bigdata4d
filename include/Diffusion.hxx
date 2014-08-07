@@ -58,10 +58,10 @@ void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * const res
       {
         ijk = i + j*jj1 + k*kk1;
         at[ijk] += c3*a[ijk-ii3] + c2*a[ijk-ii2] + c1*a[ijk-ii1] + c0*a[ijk] 
-                 + c3*a[ijk+ii1] + c2*a[ijk+ii2] + c1*a[ijk+ii3];
-        at[ijk] += c3*a[ijk-jj3] + c2*a[ijk-jj2] + c1*a[ijk-jj1] + c0*a[ijk] 
-                 + c3*a[ijk+jj1] + c2*a[ijk+jj2] + c1*a[ijk+jj3];
-        at[ijk] += c3*a[ijk-kk3] + c2*a[ijk-kk2] + c1*a[ijk-kk1] + c0*a[ijk] 
+                 + c3*a[ijk+ii1] + c2*a[ijk+ii2] + c1*a[ijk+ii3]
+                 + c3*a[ijk-jj3] + c2*a[ijk-jj2] + c1*a[ijk-jj1] + c0*a[ijk] 
+                 + c3*a[ijk+jj1] + c2*a[ijk+jj2] + c1*a[ijk+jj3]
+                 + c3*a[ijk-kk3] + c2*a[ijk-kk2] + c1*a[ijk-kk1] + c0*a[ijk] 
                  + c3*a[ijk+kk1] + c2*a[ijk+kk2] + c1*a[ijk+kk3];
       }
 }
