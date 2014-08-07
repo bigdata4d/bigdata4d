@@ -35,7 +35,7 @@ Diffusion<T,TF>::Diffusion(Master &masterin, Grid<T> &gridin) :
 namespace
 {
   template<class T>
-  void execDiffusion(T * restrict const at, const T * restrict const a, const GridDims &dims)
+  void execDiffusion(T * const restrict at, const T * const restrict a, const GridDims &dims)
   {
     long ijk,ii1,ii2,ii3,jj1,jj2,jj3,kk1,kk2,kk3;
     ii1 = 1;
@@ -47,6 +47,11 @@ namespace
     kk1 = 1*dims.ijcells;
     kk2 = 2*dims.ijcells;
     kk3 = 3*dims.ijcells;
+
+    const T c0 = -1460./576.;
+    const T c1 =   783./576.;
+    const T c2 =   -54./576.;
+    const T c3 =     1./576.;
   
     // fill field with random numbers
     for(long k=dims.kstart; k<dims.kend; ++k)
@@ -54,12 +59,12 @@ namespace
         for(long i=dims.istart; i<dims.iend; ++i)
         {
           ijk = i + j*jj1 + k*kk1;
-          at[ijk] = a[ijk-ii3] + a[ijk-ii2] + a[ijk-ii1] + a[ijk] 
-                  + a[ijk+ii1] + a[ijk+ii2] + a[ijk+ii3] 
-                  + a[ijk-jj3] + a[ijk-jj2] + a[ijk-jj1] + a[ijk]
-                  + a[ijk+jj1] + a[ijk+jj2] + a[ijk+jj3] 
-                  + a[ijk-kk3] + a[ijk-kk2] + a[ijk-kk1] + a[ijk]
-                  + a[ijk+kk1] + a[ijk+kk2] + a[ijk+kk3];
+          at[ijk] += c3*a[ijk-ii3] + c2*a[ijk-ii2] + c1*a[ijk-ii1] + c0*a[ijk] 
+                   + c3*a[ijk+ii1] + c2*a[ijk+ii2] + c1*a[ijk+ii3];
+          at[ijk] += c3*a[ijk-jj3] + c2*a[ijk-jj2] + c1*a[ijk-jj1] + c0*a[ijk] 
+                   + c3*a[ijk+jj1] + c2*a[ijk+jj2] + c1*a[ijk+jj3];
+          at[ijk] += c3*a[ijk-kk3] + c2*a[ijk-kk2] + c1*a[ijk-kk1] + c0*a[ijk] 
+                   + c3*a[ijk+kk1] + c2*a[ijk+kk2] + c1*a[ijk+kk3];
         }
   }
 }
@@ -70,6 +75,7 @@ void Diffusion<T,TF>::exec(Field<TF,T> &at, const Field<TF,T> &a)
   const GridDims dims = grid.getDims();
   execDiffusion(&at.data[0], &a.data[0], dims);
 
+  /*
   long ii1,ii2,ii3,jj1,jj2,jj3,kk1,kk2,kk3;
   ii1 = 1;
   ii2 = 2;
@@ -88,12 +94,13 @@ void Diffusion<T,TF>::exec(Field<TF,T> &at, const Field<TF,T> &a)
       {
         long ijk = i + j*dims.icells + k*dims.ijcells;
         at.data[ijk] = a.data[ijk-ii3] + a.data[ijk-ii2] + a.data[ijk-ii1] + a.data[ijk]
-                     + a.data[ijk+ii1] + a.data[ijk+ii2] + a.data[ijk+ii3]
-                     + a.data[ijk-jj3] + a.data[ijk-jj2] + a.data[ijk-jj1] + a.data[ijk]
-                     + a.data[ijk+jj1] + a.data[ijk+jj2] + a.data[ijk+jj3]
-                     + a.data[ijk-kk3] + a.data[ijk-kk2] + a.data[ijk-kk1] + a.data[ijk]
-                     + a.data[ijk+kk1] + a.data[ijk+kk2] + a.data[ijk+kk3];
+                     + a.data[ijk+ii1] + a.data[ijk+ii2] + a.data[ijk+ii3];
+                     // + a.data[ijk-jj3] + a.data[ijk-jj2] + a.data[ijk-jj1] + a.data[ijk]
+                     // + a.data[ijk+jj1] + a.data[ijk+jj2] + a.data[ijk+jj3]
+                     // + a.data[ijk-kk3] + a.data[ijk-kk2] + a.data[ijk-kk1] + a.data[ijk]
+                     // + a.data[ijk+kk1] + a.data[ijk+kk2] + a.data[ijk+kk3];
       }
+      */
 }
 
 template<class T, class TF>
