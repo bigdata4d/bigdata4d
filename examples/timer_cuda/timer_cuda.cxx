@@ -28,16 +28,16 @@ int main(int argc, char *argv[])
     Master master;
     try
     {
-      Grid grid(master, 384, 384, 384);
+      auto grid = createGrid<float>(master, 384, 384, 384);
 
-      Field<float> a(master, grid, "a");
+      auto a = createField<float>(master, grid, "a");
 
       // fill field with random numbers
       for(auto &i : a.data)
         i = std::rand() % 10;
 
       // make a copy of a
-      Field<float> b(a);
+      auto b(a);
 
       Timer timer1(master);
       timer1.start();
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
       waitCUDA();
       timer2.end();
 
-      Field<float> acuda(master, grid, "acuda");
+      auto acuda = createField<float>(master, grid, "acuda");
       finishCUDA(a_gpu, b_gpu, &acuda.data[0]);
 
       // THRUST
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
       waitCUDA();
       timer3.end();
 
-      Field<float> athrustout(master, grid, "athrustout");
+      auto athrustout = createField<float>(master, grid, "athrustout");
       thrust::copy(athrust.begin(), athrust.end(), athrustout.data.begin());
 
       // cuBLAS
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
       waitCUDA();
       timer4.end();
 
-      Field<float> acublas(master, grid, "acublas");
+      auto acublas = createField<float>(master, grid, "acublas");
       finishCUDA_cublas(a_gpu, b_gpu, &acublas.data[0]);
 
       std::ostringstream message;
