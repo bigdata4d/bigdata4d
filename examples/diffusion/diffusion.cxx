@@ -14,16 +14,17 @@ int main(int argc, char *argv[])
     Master master;
     auto grid = createGrid<double>(master, 100, 100, 100, 3);
 
-    auto a = createField<double>(master, grid, "a");
+    auto a  = createField<double>(master, grid, "a");
+    auto at = createField<double>(master, grid, "a");
 
     a.randomize(10);
 
-    Diffusion<double> diff(master, grid);
+    Diffusion<double,double> diff(master, grid);
 
     Timer timer(master, "Diffusion (CPU)");
     timer.start();
-    for(int n=0; n<1000; ++n)
-      diff.exec();
+    for(int n=0; n<500; ++n)
+      diff.exec(at, a);
     timer.end();
   }
 

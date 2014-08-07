@@ -29,14 +29,14 @@
 
 class Master;
 
-template<class T>
+template<class T, class TF>
 class Diffusion
 {
   public:
     Diffusion(Master &, Grid<T> &);
     virtual ~Diffusion();
 
-    virtual void exec(Field &, const Field &);
+    virtual void exec(Field<TF,T> &, const Field<TF,T> &);
 
   protected:
     Master &master;

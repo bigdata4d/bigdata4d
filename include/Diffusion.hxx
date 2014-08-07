@@ -25,19 +25,19 @@
 #include "Master.h"
 #include "Grid.h"
 
-template<class T>
-Diffusion<T>::Diffusion(Master &masterin, Grid<T> &gridin) :
+template<class T, class TF>
+Diffusion<T,TF>::Diffusion(Master &masterin, Grid<T> &gridin) :
   master(masterin),
   grid(gridin)
 {
 }
 
-template<class T>
-void Diffusion<T>::exec(Field &at, const Field &a)
+template<class T, class TF>
+void Diffusion<T,TF>::exec(Field<TF,T> &at, const Field<TF,T> &a)
 {
   const GridDims dims = grid.getDims();
 
-  long
+  long ii1,ii2,ii3,jj1,jj2,jj3,kk1,kk2,kk3;
   ii1 = 1;
   ii2 = 2;
   ii3 = 3;
@@ -63,7 +63,7 @@ void Diffusion<T>::exec(Field &at, const Field &a)
       }
 }
 
-template<class T>
-Diffusion<T>::~Diffusion()
+template<class T, class TF>
+Diffusion<T,TF>::~Diffusion()
 {
 }
