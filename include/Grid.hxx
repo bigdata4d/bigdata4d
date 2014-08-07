@@ -42,7 +42,7 @@ Grid<T>::~Grid()
 }
 
 template<class T>
-GridDims Grid<T>::getDims()
+const GridDims Grid<T>::getDims()
 {
   return dims;
 }

@@ -66,7 +66,7 @@ class Grid
     Grid(Master &, GridDims &, GridVars<T> &);
     virtual ~Grid();
 
-    GridDims getDims();
+    const GridDims getDims();
     long getncells();
 
   protected:

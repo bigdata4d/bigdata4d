@@ -146,7 +146,7 @@ Field<T,TG> Field<T,TG>::operator+ (const Field<T,TG> &fieldin) const
 template<class T, class TG>
 void Field<T,TG>::randomize(long base)
 {
-  GridDims dims = grid.getDims();
+  const GridDims dims = grid.getDims();
 
   // fill field with random numbers
   for(long k=dims.kstart; k<dims.kend; ++k)
