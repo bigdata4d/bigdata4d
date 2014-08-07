@@ -34,6 +34,19 @@ struct GridDims
   long jtot;
   long ktot;
   long ntot;
+
+  long icells;
+  long jcells;
+  long kcells;
+  long ncells;
+
+  long istart;
+  long jstart;
+  long kstart;
+
+  long iend;
+  long jend;
+  long kend;
 };
 
 template<class T>
@@ -60,7 +73,7 @@ class Grid
 };
 
 template<class T>
-Grid<T> createGrid(Master &, long, long, long);
+Grid<T> createGrid(Master &, long, long, long, long gc=0);
 
 #include "Grid.hxx"
 #endif

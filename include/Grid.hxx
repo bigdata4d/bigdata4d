@@ -48,15 +48,28 @@ long Grid<T>::getntot()
 }
 
 template<class T>
-Grid<T> createGrid(Master &masterin, long itotin, long jtotin, long ktotin)
+Grid<T> createGrid(Master &masterin, long itotin, long jtotin, long ktotin, long gc)
 {
-  int ntot = itotin*jtotin*ktotin;
+  long ntot = itotin*jtotin*ktotin;
 
   GridDims dims;
   dims.itot = itotin;
   dims.jtot = jtotin;
   dims.ktot = ktotin;
   dims.ntot = ntot;
+
+  dims.icells = dims.itot + 2*gc;
+  dims.jcells = dims.jtot + 2*gc;
+  dims.kcells = dims.ktot + 2*gc;
+  dims.ncells = dims.icells * dims.jcells * dims.kcells;
+
+  dims.istart = gc;
+  dims.jstart = gc;
+  dims.kstart = gc;
+
+  dims.iend = dims.itot + gc;
+  dims.jend = dims.jtot + gc;
+  dims.kend = dims.ktot + gc;
 
   GridVars<T> vars;
   for(int i=0; i<dims.itot; ++i) {
