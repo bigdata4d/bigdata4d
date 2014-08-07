@@ -38,7 +38,7 @@ Field<T,TG>::Field(Master &masterin, Grid<TG> &gridin, const std::string namein)
 
   try
   {
-    data.resize(grid.getntot());
+    data.resize(grid.getncells());
   }
   catch (...)
   {
@@ -143,6 +143,22 @@ Field<T,TG> Field<T,TG>::operator+ (const Field<T,TG> &fieldin) const
   return fieldout;
 }
 
+template<class T, class TG>
+void Field<T,TG>::randomize(long base)
+{
+  GridDims dims = grid.getDims();
+
+  // fill field with random numbers
+  for(long k=dims.kstart; k<dims.kend; ++k)
+    for(long j=dims.jstart; j<dims.jend; ++j)
+      for(long i=dims.istart; i<dims.iend; ++i)
+      {
+        long ijk = i + j*dims.icells + k*dims.ijcells;
+        data[ijk] = std::rand() % base;
+      }
+}
+
+// out of class definitions
 template<class T, class TG>
 Field<T,TG> createField(Master &masterin, Grid<TG> &gridin, const std::string namein)
 {

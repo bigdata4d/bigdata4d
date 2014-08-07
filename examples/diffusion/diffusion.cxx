@@ -15,14 +15,11 @@ int main(int argc, char *argv[])
 
     auto a = createField<double>(master, grid, "a");
 
-    // fill field with random numbers
-    for(auto &i : a.data)
-      i = std::rand() % 10;
+    a.randomize(10);
 
     Timer timer(master, "Diffusion (CPU)");
     timer.start();
-    for(int n=0; n<1000; ++n)
-      a += b;
+    for(int n=0; n<1000; ++n);
     timer.end();
   }
 

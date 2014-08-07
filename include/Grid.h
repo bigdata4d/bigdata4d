@@ -38,6 +38,8 @@ struct GridDims
   long icells;
   long jcells;
   long kcells;
+
+  long ijcells;
   long ncells;
 
   long istart;
@@ -64,7 +66,8 @@ class Grid
     Grid(Master &, GridDims &, GridVars<T> &);
     virtual ~Grid();
 
-    long getntot();
+    GridDims getDims();
+    long getncells();
 
   protected:
     Master &master;

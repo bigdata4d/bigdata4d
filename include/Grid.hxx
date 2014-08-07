@@ -42,9 +42,15 @@ Grid<T>::~Grid()
 }
 
 template<class T>
-long Grid<T>::getntot()
+GridDims Grid<T>::getDims()
 {
-  return dims.ntot;
+  return dims;
+}
+
+template<class T>
+long Grid<T>::getncells()
+{
+  return dims.ncells;
 }
 
 template<class T>
@@ -61,7 +67,9 @@ Grid<T> createGrid(Master &masterin, long itotin, long jtotin, long ktotin, long
   dims.icells = dims.itot + 2*gc;
   dims.jcells = dims.jtot + 2*gc;
   dims.kcells = dims.ktot + 2*gc;
-  dims.ncells = dims.icells * dims.jcells * dims.kcells;
+
+  dims.ijcells = dims.icells * dims.jcells;
+  dims.ncells  = dims.icells * dims.jcells * dims.kcells;
 
   dims.istart = gc;
   dims.jstart = gc;

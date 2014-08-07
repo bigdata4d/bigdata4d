@@ -42,6 +42,8 @@ class Field
 
     Field operator+ (const Field &) const;
 
+    void randomize(long);
+
     std::vector<T> data;
 
   protected:
