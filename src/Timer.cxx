@@ -21,12 +21,15 @@
  * along with BigData4D.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <sstream>
+#include <iomanip>
 #include "Timer.h"
 #include "Master.h"
 
-Timer::Timer(Master &masterin)
+Timer::Timer(Master &masterin, std::string namein)
   : master(masterin)
 {
+  name = namein;
 }
 
 Timer::~Timer()
@@ -35,14 +38,19 @@ Timer::~Timer()
 
 void Timer::start()
 {
-  master.printMessage("Start timer\n");
+  std::ostringstream message;
+  message << "Start timer " << name << "\n";
+  master.printMessage(message.str());
   samples.push_back(master.getTime());
 }
 
 void Timer::end()
 {
   samples.push_back(master.getTime());
-  master.printMessage("End timer\n");
+  std::ostringstream message;
+  message << "End timer " << name << ", elapsed time (s): "
+          << std::setprecision(5) << getTotal() << "\n";
+  master.printMessage(message.str());
 }
 
 void Timer::sample()

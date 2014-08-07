@@ -31,7 +31,7 @@ class Master;
 class Timer
 {
   public:
-    Timer(Master &);
+    Timer(Master &, std::string);
     virtual ~Timer();
 
     void start();
@@ -43,5 +43,6 @@ class Timer
   protected:
     Master &master;
     std::vector<double> samples;
+    std::string name;
 };
 #endif

@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
       // make a copy of a
       auto b(a);
 
-      Timer timer1(master);
+      Timer timer1(master, "CPU");
       timer1.start();
       for(int n=0; n<100; ++n)
         a += b;
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
       float *a_gpu, *b_gpu;
       prepareCUDA(&a_gpu, &b_gpu, &b.data[0], &b.data[0]);
 
-      Timer timer2(master);
+      Timer timer2(master, "GPU (manual)");
       timer2.start();
       for(int n=0; n<100; ++n)
         testCUDA(a_gpu, b_gpu);
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
       thrust::device_vector<float> athrust(b.data.begin(), b.data.end());
       thrust::device_vector<float> bthrust(b.data.begin(), b.data.end());
 
-      Timer timer3(master);
+      Timer timer3(master, "GPU (Thrust)");
       timer3.start();
       for(int n=0; n<100; ++n)
         testCUDA_thrust(athrust, bthrust);
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
       // cuBLAS
       prepareCUDA_cublas(&a_gpu, &b_gpu, &b.data[0], &b.data[0]);
 
-      Timer timer4(master);
+      Timer timer4(master, "GPU (cuBLAS)");
       timer4.start();
       for(int n=0; n<100; ++n)
         testCUDA_cublas(a_gpu, b_gpu);
