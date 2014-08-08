@@ -27,11 +27,15 @@ target_link_libraries(operators bigdata4d ${LIBS})
 add_executable(timer timer/timer.cxx)
 target_link_libraries(timer bigdata4d ${LIBS})
 
-add_executable(diffusion diffusion/diffusion.cxx)
-target_link_libraries(diffusion bigdata4d ${LIBS})
+#add_executable(diffusion diffusion/diffusion.cxx)
+#target_link_libraries(diffusion bigdata4d ${LIBS})
 
 if(USECUDA)
   cuda_add_executable(timer_cuda timer_cuda/timer_cuda.cu timer_cuda/timer_cuda.cxx)
   cuda_add_cublas_to_target(timer_cuda)
   target_link_libraries(timer_cuda bigdata4d ${LIBS})
+
+  cuda_add_executable(diffusion diffusion/diffusion.cu)
+  cuda_add_cublas_to_target(diffusion)
+  target_link_libraries(diffusion bigdata4d ${LIBS})
 endif()
