@@ -22,6 +22,7 @@
  */
 
 #include <thrust/device_vector.h>
+#include <cstdio>
 #include "DiffusionGPU.h"
 #include "Master.h"
 #include "Grid.h"
@@ -35,19 +36,18 @@ DiffusionGPU<T,TF>::DiffusionGPU(Master &masterin, Grid<T> &gridin) :
 }
 
 template<class TF>
-__global__ void execDiffusion(TF * __restrict__ at, TF * __restrict__ a)
+__global__ void execDiffusion(TF * __restrict__ at, TF * __restrict__ a, const GridDims dims)
 {
-  int i = blockIdx.x*blockDim.x + threadIdx.x;
-  int j = blockIdx.y*blockDim.y + threadIdx.y;
-  int k = blockIdx.z;
+  const TF c0 = -1460./576.;
+  const TF c1 =   783./576.;
+  const TF c2 =   -54./576.;
+  const TF c3 =     1./576.;
 
-  int ijk = i + j + k;
-}
-
-/*
-void DiffusionGPU<T,TF>::execDiffusion(TF * const restrict at, const TF * const restrict a, const GridDims &dims)
-{
   long ijk,ii1,ii2,ii3,jj1,jj2,jj3,kk1,kk2,kk3;
+  long i = blockIdx.x*blockDim.x + threadIdx.x + dims.istart;
+  long j = blockIdx.y*blockDim.y + threadIdx.y + dims.jstart;
+  long k = blockIdx.z + dims.kstart;
+
   ii1 = 1;
   ii2 = 2;
   ii3 = 3;
@@ -58,25 +58,14 @@ void DiffusionGPU<T,TF>::execDiffusion(TF * const restrict at, const TF * const 
   kk2 = 2*dims.ijcells;
   kk3 = 3*dims.ijcells;
 
-  const T c0 = -1460./576.;
-  const T c1 =   783./576.;
-  const T c2 =   -54./576.;
-  const T c3 =     1./576.;
-
-  // fill field with random numbers
-  for(long k=dims.kstart; k<dims.kend; ++k)
-    for(long j=dims.jstart; j<dims.jend; ++j)
-      for(long i=dims.istart; i<dims.iend; ++i)
-      {
-        ijk = i + j*jj1 + k*kk1;
-        at[ijk] += c3*a[ijk-ii3] + c2*a[ijk-ii2] + c1*a[ijk-ii1] + c0*a[ijk] 
-                 + c3*a[ijk+ii1] + c2*a[ijk+ii2] + c1*a[ijk+ii3]
-                 + c3*a[ijk-jj3] + c2*a[ijk-jj2] + c1*a[ijk-jj1] + c0*a[ijk] 
-                 + c3*a[ijk+jj1] + c2*a[ijk+jj2] + c1*a[ijk+jj3]
-                 + c3*a[ijk-kk3] + c2*a[ijk-kk2] + c1*a[ijk-kk1] + c0*a[ijk] 
-                 + c3*a[ijk+kk1] + c2*a[ijk+kk2] + c1*a[ijk+kk3];
-      }
-}*/
+  ijk = i + j*jj1 + k*kk1;
+  at[ijk] += c3*a[ijk-ii3] + c2*a[ijk-ii2] + c1*a[ijk-ii1] + c0*a[ijk] 
+           + c3*a[ijk+ii1] + c2*a[ijk+ii2] + c1*a[ijk+ii3]
+           + c3*a[ijk-jj3] + c2*a[ijk-jj2] + c1*a[ijk-jj1] + c0*a[ijk] 
+           + c3*a[ijk+jj1] + c2*a[ijk+jj2] + c1*a[ijk+jj3]
+           + c3*a[ijk-kk3] + c2*a[ijk-kk2] + c1*a[ijk-kk1] + c0*a[ijk] 
+           + c3*a[ijk+kk1] + c2*a[ijk+kk2] + c1*a[ijk+kk3];
+}
 
 template<class T, class TF>
 void DiffusionGPU<T,TF>::exec(thrust::device_vector<TF> &at_gpu, thrust::device_vector<TF> &a_gpu)
@@ -85,10 +74,16 @@ void DiffusionGPU<T,TF>::exec(thrust::device_vector<TF> &at_gpu, thrust::device_
   TF *at = thrust::raw_pointer_cast(at_gpu.data());
   TF *a  = thrust::raw_pointer_cast(a_gpu .data());
 
-  dim3 grid (1,1,1);
-  dim3 block(1,1,1);
+  const int blocki = 256;
+  const int blockj = 1;
 
-  execDiffusion<<<grid, block>>>(at, a);
+  dim3 grid (dims.itot/blocki, dims.jtot/blockj, dims.ktot);
+  dim3 block(blocki, blockj, 1);
+
+  execDiffusion<<<grid, block>>>(at, a, dims);
+  cudaError_t error = cudaGetLastError();
+  if(error != cudaSuccess)
+    std::printf("ERROR: %s\n", cudaGetErrorString(error));
 }
 
 template<class T, class TF>
