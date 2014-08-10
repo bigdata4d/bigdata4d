@@ -104,5 +104,5 @@ void Diffusion<T,TF>::exec(Field<TF,T> &at, const Field<TF,T> &a)
 template<class T, class TF>
 Diffusion<T,TF>::~Diffusion()
 {
-  master.printMessage("Destructed Grid\n");
+  master.printMessage("Destructed Diffusion\n");
 }

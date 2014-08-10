@@ -35,6 +35,12 @@ DiffusionGPU<T,TF>::DiffusionGPU(Master &masterin, Grid<T> &gridin) :
   master.printMessage("Constructed DiffusionGPU\n");
 }
 
+template<class T, class TF>
+DiffusionGPU<T,TF>::~DiffusionGPU()
+{
+  master.printMessage("Destructed DiffusionGPU\n");
+}
+
 template<class TF>
 __global__ void execDiffusion(TF * __restrict__ at, TF * __restrict__ a, const GridDims dims)
 {
@@ -74,20 +80,11 @@ void DiffusionGPU<T,TF>::exec(thrust::device_vector<TF> &at_gpu, thrust::device_
   TF *at = thrust::raw_pointer_cast(at_gpu.data());
   TF *a  = thrust::raw_pointer_cast(a_gpu .data());
 
-  const int blocki = 256;
+  const int blocki = 1;
   const int blockj = 1;
 
   dim3 grid (dims.itot/blocki, dims.jtot/blockj, dims.ktot);
   dim3 block(blocki, blockj, 1);
 
   execDiffusion<<<grid, block>>>(at, a, dims);
-  cudaError_t error = cudaGetLastError();
-  if(error != cudaSuccess)
-    std::printf("ERROR: %s\n", cudaGetErrorString(error));
-}
-
-template<class T, class TF>
-DiffusionGPU<T,TF>::~DiffusionGPU()
-{
-  master.printMessage("Destructed Grid\n");
 }
