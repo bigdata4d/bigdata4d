@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     Master master;
     try
     {
-      Grid<double> grid = createGrid<double>(master, 384, 256, 512, 3);
+      Grid<double> grid = createGrid<double>(master, 2, 2, 2, 3);
 
       Field<double,double> a  = createField<double>(master, grid, "a" );
       Field<double,double> at = createField<double>(master, grid, "at");
@@ -55,16 +55,22 @@ int main(int argc, char *argv[])
               << "Speedup CUDA: " << timer1.getTotal() / timer2.getTotal() << "\n";
       master.printMessage(message.str());
 
-      for(int n=3; n<at.data.size(); n+=384*384*20)
-      {
-        std::ostringstream message;
-        message << std::setw(8);
-        message << n << " = {" 
-          << std::setw(6) << at.data[n] << ", "
-          << std::setw(6) << at_cuda.data[n] << " }\n";
-        master.printMessage(message.str());
-      }
-    }
+      // print some output
+      const GridDims dims = grid.getDims();
+      //for(long k=dims.kstart; k<dims.kend; ++k)
+      //  for(long j=dims.jstart; j<dims.jend; ++j)
+      //    for(long i=dims.istart; i<dims.iend; ++i)
+      for(long k=0; k<dims.kcells; ++k)
+        for(long j=0; j<dims.jcells; ++j)
+          for(long i=0; i<dims.icells; ++i)
+          {
+            long ijk = i + j*dims.icells + k*dims.ijcells;
+            std::ostringstream message;
+            message << "(" << i <<  "," << j <<  "," << k << ") = " 
+                    << at.data[ijk] << ", " << at_cuda.data[ijk] << "\n";
+            master.printMessage(message.str());
+          }
+        }
 
     catch (std::exception &e)
     {
