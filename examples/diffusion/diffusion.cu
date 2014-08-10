@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     Master master;
     try
     {
-      Grid<double> grid = createGrid<double>(master, 384, 384, 384, 3);
+      Grid<double> grid = createGrid<double>(master, 384, 256, 512, 3);
 
       Field<double,double> a  = createField<double>(master, grid, "a" );
       Field<double,double> at = createField<double>(master, grid, "at");

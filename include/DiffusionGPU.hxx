@@ -27,27 +27,27 @@
 #include "Master.h"
 #include "Grid.h"
 
-template<class T, class TF>
-DiffusionGPU<T,TF>::DiffusionGPU(Master &masterin, Grid<T> &gridin) :
+template<class TGrid, class TField>
+DiffusionGPU<TGrid,TField>::DiffusionGPU(Master &masterin, Grid<TGrid> &gridin) :
   master(masterin),
   grid(gridin)
 {
   master.printMessage("Constructed DiffusionGPU\n");
 }
 
-template<class T, class TF>
-DiffusionGPU<T,TF>::~DiffusionGPU()
+template<class TGrid, class TField>
+DiffusionGPU<TGrid,TField>::~DiffusionGPU()
 {
   master.printMessage("Destructed DiffusionGPU\n");
 }
 
-template<class TF>
-__global__ void execDiffusion(TF * __restrict__ at, TF * __restrict__ a, const GridDims dims)
+template<class TField>
+__global__ void execDiffusion(TField * __restrict__ at, TField * __restrict__ a, const GridDims dims)
 {
-  const TF c0 = -1460./576.;
-  const TF c1 =   783./576.;
-  const TF c2 =   -54./576.;
-  const TF c3 =     1./576.;
+  const TField c0 = -1460./576.;
+  const TField c1 =   783./576.;
+  const TField c2 =   -54./576.;
+  const TField c3 =     1./576.;
 
   long ijk,ii1,ii2,ii3,jj1,jj2,jj3,kk1,kk2,kk3;
   long i = blockIdx.x*blockDim.x + threadIdx.x + dims.istart;
@@ -77,12 +77,12 @@ __global__ void execDiffusion(TF * __restrict__ at, TF * __restrict__ a, const G
   }
 }
 
-template<class T, class TF>
-void DiffusionGPU<T,TF>::exec(thrust::device_vector<TF> &at_gpu, thrust::device_vector<TF> &a_gpu)
+template<class TGrid, class TField>
+void DiffusionGPU<TGrid,TField>::exec(thrust::device_vector<TField> &at_gpu, thrust::device_vector<TField> &a_gpu)
 {
   const GridDims dims = grid.getDims();
-  TF *at = thrust::raw_pointer_cast(at_gpu.data());
-  TF *a  = thrust::raw_pointer_cast(a_gpu .data());
+  TField *at = thrust::raw_pointer_cast(at_gpu.data());
+  TField *a  = thrust::raw_pointer_cast(a_gpu .data());
 
   const int blocki = 256;
   const int blockj = 1;
