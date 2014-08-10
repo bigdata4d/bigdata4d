@@ -52,7 +52,6 @@ void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * const res
   const T c2 =   -54./576.;
   const T c3 =     1./576.;
 
-  // fill field with random numbers
   for(long k=dims.kstart; k<dims.kend; ++k)
     for(long j=dims.jstart; j<dims.jend; ++j)
       for(long i=dims.istart; i<dims.iend; ++i)
@@ -72,33 +71,6 @@ void Diffusion<T,TF>::exec(Field<TF,T> &at, const Field<TF,T> &a)
 {
   const GridDims dims = grid.getDims();
   execDiffusion(&at.data[0], &a.data[0], dims);
-
-  /*
-  long ii1,ii2,ii3,jj1,jj2,jj3,kk1,kk2,kk3;
-  ii1 = 1;
-  ii2 = 2;
-  ii3 = 3;
-  jj1 = 1*dims.icells;
-  jj2 = 2*dims.icells;
-  jj3 = 3*dims.icells;
-  kk1 = 1*dims.ijcells;
-  kk2 = 2*dims.ijcells;
-  kk3 = 3*dims.ijcells;
-
-  // fill field with random numbers
-  for(long k=dims.kstart; k<dims.kend; ++k)
-    for(long j=dims.jstart; j<dims.jend; ++j)
-      for(long i=dims.istart; i<dims.iend; ++i)
-      {
-        long ijk = i + j*dims.icells + k*dims.ijcells;
-        at.data[ijk] = a.data[ijk-ii3] + a.data[ijk-ii2] + a.data[ijk-ii1] + a.data[ijk]
-                     + a.data[ijk+ii1] + a.data[ijk+ii2] + a.data[ijk+ii3];
-                     // + a.data[ijk-jj3] + a.data[ijk-jj2] + a.data[ijk-jj1] + a.data[ijk]
-                     // + a.data[ijk+jj1] + a.data[ijk+jj2] + a.data[ijk+jj3]
-                     // + a.data[ijk-kk3] + a.data[ijk-kk2] + a.data[ijk-kk1] + a.data[ijk]
-                     // + a.data[ijk+kk1] + a.data[ijk+kk2] + a.data[ijk+kk3];
-      }
-      */
 }
 
 template<class T, class TF>

@@ -64,13 +64,17 @@ __global__ void execDiffusion(TF * __restrict__ at, TF * __restrict__ a, const G
   kk2 = 2*dims.ijcells;
   kk3 = 3*dims.ijcells;
 
-  ijk = i + j*jj1 + k*kk1;
-  at[ijk] += c3*a[ijk-ii3] + c2*a[ijk-ii2] + c1*a[ijk-ii1] + c0*a[ijk] 
-           + c3*a[ijk+ii1] + c2*a[ijk+ii2] + c1*a[ijk+ii3]
-           + c3*a[ijk-jj3] + c2*a[ijk-jj2] + c1*a[ijk-jj1] + c0*a[ijk] 
-           + c3*a[ijk+jj1] + c2*a[ijk+jj2] + c1*a[ijk+jj3]
-           + c3*a[ijk-kk3] + c2*a[ijk-kk2] + c1*a[ijk-kk1] + c0*a[ijk] 
-           + c3*a[ijk+kk1] + c2*a[ijk+kk2] + c1*a[ijk+kk3];
+  // only perform the kernel if the coordinate is in the 3d field
+  if(i < dims.iend && j < dims.jend && k < dims.kend)
+  {
+    ijk = i + j*jj1 + k*kk1;
+    at[ijk] += c3*a[ijk-ii3] + c2*a[ijk-ii2] + c1*a[ijk-ii1] + c0*a[ijk] 
+             + c3*a[ijk+ii1] + c2*a[ijk+ii2] + c1*a[ijk+ii3]
+             + c3*a[ijk-jj3] + c2*a[ijk-jj2] + c1*a[ijk-jj1] + c0*a[ijk] 
+             + c3*a[ijk+jj1] + c2*a[ijk+jj2] + c1*a[ijk+jj3]
+             + c3*a[ijk-kk3] + c2*a[ijk-kk2] + c1*a[ijk-kk1] + c0*a[ijk] 
+             + c3*a[ijk+kk1] + c2*a[ijk+kk2] + c1*a[ijk+kk3];
+  }
 }
 
 template<class T, class TF>
@@ -80,7 +84,7 @@ void DiffusionGPU<T,TF>::exec(thrust::device_vector<TF> &at_gpu, thrust::device_
   TF *at = thrust::raw_pointer_cast(at_gpu.data());
   TF *a  = thrust::raw_pointer_cast(a_gpu .data());
 
-  const int blocki = 1;
+  const int blocki = 256;
   const int blockj = 1;
 
   dim3 grid (dims.itot/blocki, dims.jtot/blockj, dims.ktot);
