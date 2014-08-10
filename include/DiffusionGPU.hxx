@@ -84,10 +84,12 @@ void DiffusionGPU<TGrid,TField>::exec(thrust::device_vector<TField> &at_gpu, thr
   TField *at = thrust::raw_pointer_cast(at_gpu.data());
   TField *a  = thrust::raw_pointer_cast(a_gpu .data());
 
-  const int blocki = 256;
-  const int blockj = 1;
+  const int blocki = 128;
+  const int blockj = 2;
+  const int gridi = dims.itot/blocki + (dims.itot%blocki > 0);
+  const int gridj = dims.jtot/blockj + (dims.jtot%blockj > 0);
 
-  dim3 grid (dims.itot/blocki, dims.jtot/blockj, dims.ktot);
+  dim3 grid (gridi, gridj, dims.ktot);
   dim3 block(blocki, blockj, 1);
 
   execDiffusion<<<grid, block>>>(at, a, dims);

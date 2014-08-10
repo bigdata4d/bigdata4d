@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     Master master;
     try
     {
-      Grid<double> grid = createGrid<double>(master, 2, 2, 2, 3);
+      Grid<double> grid = createGrid<double>(master, 128, 128, 512, 3);
 
       Field<double,double> a  = createField<double>(master, grid, "a" );
       Field<double,double> at = createField<double>(master, grid, "at");
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
       Timer timer1(master, "Diffusion (CPU)");
       timer1.start();
-      for(int n=0; n<10; ++n)
+      for(int n=0; n<100; ++n)
         diff.exec(at, a);
       timer1.end();
 
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
       Timer timer2(master, "Diffusion (GPU)");
       timer2.start();
-      for(int n=0; n<10; ++n)
+      for(int n=0; n<100; ++n)
         diffGPU.exec(at_gpu, a_gpu);
       // wait until all calculations are done
       cudaDeviceSynchronize();
@@ -50,27 +50,28 @@ int main(int argc, char *argv[])
 
       std::ostringstream message;
       message << "Elapsed time (s): "
-              << std::setprecision(5) << timer1.getTotal() << ", "
-              << std::setprecision(5) << timer2.getTotal() << ", "
+              << std::fixed << std::setprecision(5) << timer1.getTotal() << ", "
+              << std::fixed << std::setprecision(5) << timer2.getTotal() << ", "
               << "Speedup CUDA: " << timer1.getTotal() / timer2.getTotal() << "\n";
       master.printMessage(message.str());
 
       // print some output
       const GridDims dims = grid.getDims();
-      //for(long k=dims.kstart; k<dims.kend; ++k)
-      //  for(long j=dims.jstart; j<dims.jend; ++j)
-      //    for(long i=dims.istart; i<dims.iend; ++i)
-      for(long k=0; k<dims.kcells; ++k)
-        for(long j=0; j<dims.jcells; ++j)
-          for(long i=0; i<dims.icells; ++i)
+      for(long k=dims.kstart+3; k<dims.kend; k+=dims.ktot/2)
+        for(long j=dims.jstart+3; j<dims.jend; j+=dims.jtot/2)
+          for(long i=dims.istart+3; i<dims.iend; i+=dims.itot/2)
           {
             long ijk = i + j*dims.icells + k*dims.ijcells;
             std::ostringstream message;
-            message << "(" << i <<  "," << j <<  "," << k << ") = " 
-                    << at.data[ijk] << ", " << at_cuda.data[ijk] << "\n";
+            message << "(" 
+                    << std::setw(5) << i-dims.istart <<  "," 
+                    << std::setw(5) << j-dims.jstart <<  "," 
+                    << std::setw(5) << k-dims.kstart << ") = " 
+                    << std::setw(10) << std::fixed << std::setprecision(3) << at.data[ijk] << ", "
+                    << std::setw(10) << std::fixed << std::setprecision(3) << at_cuda.data[ijk] << "\n";
             master.printMessage(message.str());
           }
-        }
+    }
 
     catch (std::exception &e)
     {
