@@ -111,10 +111,10 @@ Master::~Master()
 
 void Master::cleanup()
 {
-#ifdef USEMPI
+  #ifdef USEMPI
   if(initialized)
     MPI_Finalize();
-#endif
+  #endif
 }
 
 /*
@@ -205,7 +205,7 @@ void Master::printError(std::string message)
 
 int Master::checkError(int n)
 {
-#ifdef USEMPI
+  #ifdef USEMPI
   char errbuffer[MPI_MAX_ERROR_STRING];
   int errlen;
 
@@ -219,20 +219,20 @@ int Master::checkError(int n)
 
     return 1;
   }
-#endif
+  #endif
 
   return 0;
 }
 
 double Master::getTime()
 {
-#ifdef USEMPI
+  #ifdef USEMPI
   return MPI_Wtime();
-#else
+  #else
   timeval timestruct;
   gettimeofday(&timestruct, NULL);
   double time;
   time = (double)timestruct.tv_sec + (double)timestruct.tv_usec*1.e-6;
   return time;
-#endif
+  #endif
 }
