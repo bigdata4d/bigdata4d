@@ -26,12 +26,10 @@
 
 #include <vector>
 
-class Master;
-
 class Timer
 {
   public:
-    Timer(Master &, std::string);
+    Timer(std::string);
     virtual ~Timer();
 
     void start();
@@ -41,7 +39,6 @@ class Timer
     double getTotal();
 
   protected:
-    Master &master;
     std::vector<double> samples;
     std::string name;
 };

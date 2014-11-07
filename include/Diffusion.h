@@ -27,19 +27,16 @@
 #include "Field.h"
 #include "Grid.h"
 
-class Master;
-
 template<class T, class TF>
 class Diffusion
 {
   public:
-    Diffusion(Master &, Grid<T> &);
+    Diffusion(Grid<T> &);
     virtual ~Diffusion();
 
     virtual void exec(Field<TF,T> &, const Field<TF,T> &);
 
   protected:
-    Master &master;
     Grid<T> &grid;
 
   private:

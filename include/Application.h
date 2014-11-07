@@ -24,21 +24,16 @@
 #ifndef APPLICATION
 #define APPLICATION
 
-class Master;
-
 class Application
 {
   public:
-    Application(Master &, int, char **);
-    virtual ~Application();
+    Application(int, char **) {};
+    virtual ~Application() {};
 
     // disable the assignment and copy constructors
     Application(const Application &) = delete;
     Application &operator=(const Application &) = delete;
 
     virtual void exec() = 0;
-
-  protected:
-    Master &master;
 };
 #endif

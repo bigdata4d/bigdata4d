@@ -26,8 +26,7 @@
 #include "Timer.h"
 #include "Master.h"
 
-Timer::Timer(Master &masterin, std::string namein)
-  : master(masterin)
+Timer::Timer(std::string namein)
 {
   name = namein;
 }
@@ -38,6 +37,7 @@ Timer::~Timer()
 
 void Timer::start()
 {
+  Master &master = Master::getInstance();
   std::ostringstream message;
   message << "Start timer " << name << "\n";
   master.printMessage(message.str());
@@ -46,6 +46,7 @@ void Timer::start()
 
 void Timer::end()
 {
+  Master &master = Master::getInstance();
   samples.push_back(master.getTime());
   std::ostringstream message;
   message << "End timer " << name << ", elapsed time (s): "
@@ -55,10 +56,12 @@ void Timer::end()
 
 void Timer::sample()
 {
+  Master &master = Master::getInstance();
   samples.push_back(master.getTime());
 }
 
 double Timer::getTotal()
 {
+  Master &master = Master::getInstance();
   return samples.back() - samples.front();
 }

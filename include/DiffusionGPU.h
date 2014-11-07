@@ -27,19 +27,16 @@
 #include "Field.h"
 #include "Grid.h"
 
-class Master;
-
 template<class T, class TF>
 class DiffusionGPU
 {
   public:
-    DiffusionGPU(Master &, Grid<T> &);
+    DiffusionGPU(Grid<T> &);
     virtual ~DiffusionGPU();
 
     void exec(thrust::device_vector<TF> &at_gpu, thrust::device_vector<TF> &a_gpu);
 
   protected:
-    Master &master;
     Grid<T> &grid;
 
   private:

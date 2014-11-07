@@ -31,7 +31,7 @@ class Master;
 class SimpleApplication : public Application
 {
   public:
-    SimpleApplication(Master &, int, char **);
+    SimpleApplication(int, char **);
     ~SimpleApplication();
 
     void exec();

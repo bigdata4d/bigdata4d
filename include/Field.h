@@ -27,13 +27,11 @@
 #include <vector>
 #include "Grid.h"
 
-class Master;
-
 template<class T, class TG>
 class Field
 {
   public:
-    Field(Master &, Grid<TG> &, const std::string);
+    Field(Grid<TG> &, const std::string);
     virtual ~Field();
 
     Field(const Field &);
@@ -47,13 +45,12 @@ class Field
     std::vector<T> data;
 
   protected:
-    Master &master;
     Grid<TG> &grid;
     std::string name;
 };
 
 template<class T, class TG>
-Field<T,TG> createField(Master &, Grid<TG> &, const std::string);
+Field<T,TG> createField(Grid<TG> &, const std::string);
 
 #include "Field.hxx"
 #endif

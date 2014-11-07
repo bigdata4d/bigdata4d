@@ -29,7 +29,6 @@
 
 template<class TGrid, class TField>
 DiffusionGPU<TGrid,TField>::DiffusionGPU(Master &masterin, Grid<TGrid> &gridin) :
-  master(masterin),
   grid(gridin)
 {
   master.printMessage("Constructed DiffusionGPU\n");

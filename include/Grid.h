@@ -26,8 +26,6 @@
 
 #include <vector>
 
-class Master;
-
 struct GridDims
 {
   long itot;
@@ -63,20 +61,19 @@ template<class T>
 class Grid
 {
   public:
-    Grid(Master &, GridDims &, GridVars<T> &);
-    virtual ~Grid();
+    Grid(GridDims &, GridVars<T> &);
+    ~Grid();
 
     const GridDims getDims();
     long getncells();
 
   protected:
-    Master &master;
     const GridDims dims;
     const GridVars<T> vars;
 };
 
 template<class T>
-Grid<T> createGrid(Master &, long, long, long, long gc=0);
+Grid<T> createGrid(long, long, long, long gc=0);
 
 #include "Grid.hxx"
 #endif

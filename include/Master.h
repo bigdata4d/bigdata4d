@@ -33,14 +33,8 @@
 class Master
 {
   public:
-    Master();
-    ~Master();
+    static Master &getInstance();
 
-    // disable the assignment and copy constructors
-    // Master(const Master &) = delete;
-    // Master &operator=(const Master &) = delete;
-
-    // int init();
     void printMessage(std::string);
     void printError  (std::string);
 
@@ -49,6 +43,12 @@ class Master
     int mpiid;
 
   private:
+    Master();
+    ~Master();
+
+    Master(const Master &) = delete;
+    Master &operator=(const Master &) = delete;
+
     void cleanup();
     int checkError(int);
 

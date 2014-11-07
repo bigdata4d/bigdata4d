@@ -27,17 +27,18 @@
 #include "Master.h"
 
 template<class T>
-Grid<T>::Grid(Master &masterin, GridDims &dimsin, GridVars<T> &varsin) :
-  master(masterin),
+Grid<T>::Grid(GridDims &dimsin, GridVars<T> &varsin) :
   dims(dimsin),
   vars(varsin)
 {
+  Master &master = Master::getInstance();
   master.printMessage("Constructed Grid\n");
 }
 
 template<class T>
 Grid<T>::~Grid()
 {
+  Master &master = Master::getInstance();
   master.printMessage("Destructed Grid\n");
 }
 
@@ -54,7 +55,7 @@ long Grid<T>::getncells()
 }
 
 template<class T>
-Grid<T> createGrid(Master &masterin, long itotin, long jtotin, long ktotin, long gc)
+Grid<T> createGrid(long itotin, long jtotin, long ktotin, long gc)
 {
   long ntot = itotin*jtotin*ktotin;
 
@@ -87,5 +88,5 @@ Grid<T> createGrid(Master &masterin, long itotin, long jtotin, long ktotin, long
   for(int k=0; k<dims.ktot; ++k) {
     vars.z.push_back((0.5+k)/dims.ktot); }
   
-  return Grid<T>(masterin, dims, vars);
+  return Grid<T>(dims, vars);
 }

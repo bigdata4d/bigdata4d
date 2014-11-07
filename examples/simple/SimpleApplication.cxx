@@ -24,18 +24,21 @@
 #include "SimpleApplication.h"
 #include "Master.h"
 
-SimpleApplication::SimpleApplication(Master &masterin, int argc, char *argv[])
-  : Application(masterin, argc, argv)
+SimpleApplication::SimpleApplication(int argc, char *argv[])
+  : Application(argc, argv)
 {
+  Master &master = Master::getInstance();
   master.printMessage("Started application SimpleApplication\n");
 }
 
 SimpleApplication::~SimpleApplication()
 {
+  Master &master = Master::getInstance();
   master.printMessage("Finished application SimpleApplication\n");
 }
 
 void SimpleApplication::exec()
 {
+  Master &master = Master::getInstance();
   master.printMessage("Hello world!\n");
 }

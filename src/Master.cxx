@@ -31,6 +31,12 @@
 #include <sstream>
 #include "Master.h"
 
+Master &Master::getInstance()
+{
+  static Master master;
+  return master;
+}
+
 #ifdef USEMPI
 Master::Master()
 {

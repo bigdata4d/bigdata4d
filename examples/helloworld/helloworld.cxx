@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
   try
   {
-    Master master;
+    Master &master = Master::getInstance();
     master.printMessage("Hello World!\n");
   }
 

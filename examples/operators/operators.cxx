@@ -9,11 +9,10 @@ int main(int argc, char *argv[])
 {
   try
   {
-    Master master;
-    auto grid = createGrid<double>(master, 1, 1, 10);
+    auto grid = createGrid<double>(1, 1, 10);
 
-    auto a = createField<double>(master, grid, "a");
-    auto b = createField<double>(master, grid, "b");
+    auto a = createField<double>(grid, "a");
+    auto b = createField<double>(grid, "b");
 
     // fill field with random numbers
     for(auto &i : a.data)
@@ -23,7 +22,7 @@ int main(int argc, char *argv[])
       i = std::rand() % 10;
 
     // test the copy operator
-    auto aa = createField<double>(master, grid, "aa");
+    auto aa = createField<double>(grid, "aa");
     aa = a;
 
     // test the assignment operator
@@ -34,7 +33,7 @@ int main(int argc, char *argv[])
     c += b;
 
     // test the addition operator
-    auto d = createField<double>(master, grid, "d");
+    auto d = createField<double>(grid, "d");
     d = a + b + c;
 
     auto e = a + b + c;
@@ -51,6 +50,7 @@ int main(int argc, char *argv[])
         << std::setw(6) <<  c.data[n] << ", "
         << std::setw(6) <<  d.data[n] << ", "
         << std::setw(6) <<  e.data[n] << " }\n";
+      Master &master = Master::getInstance();
       master.printMessage(message.str());
     }
   }

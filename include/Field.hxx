@@ -24,17 +24,16 @@
 #include <vector>
 #include <sstream>
 #include "Field.h"
-#include "Master.h"
 #include "Grid.h"
 
 #define restrict RESTRICTKEYWORD
 
 template<class T, class TG>
-Field<T,TG>::Field(Master &masterin, Grid<TG> &gridin, const std::string namein)
-  : master(masterin),
-    grid(gridin)
+Field<T,TG>::Field(Grid<TG> &gridin, const std::string namein)
+  : grid(gridin)
 {
   name = namein;
+  Master &master = Master::getInstance();
 
   try
   {
@@ -54,6 +53,7 @@ Field<T,TG>::Field(Master &masterin, Grid<TG> &gridin, const std::string namein)
 template<class T, class TG>
 Field<T,TG>::~Field()
 {
+  Master &master = Master::getInstance();
   std::ostringstream message;
   message << "Destructed Field " << name << "\n";
   master.printMessage(message.str());
@@ -62,9 +62,9 @@ Field<T,TG>::~Field()
 // overloaded operators
 template<class T, class TG>
 Field<T,TG>::Field(const Field &fieldin)
-  : master(fieldin.master),
-    grid(fieldin.grid)
+  : grid(fieldin.grid)
 {
+  Master &master = Master::getInstance();
   name = "copy of " + fieldin.name;
 
   data = fieldin.data;
@@ -160,7 +160,7 @@ void Field<T,TG>::randomize(long base)
 
 // out of class definitions
 template<class T, class TG>
-Field<T,TG> createField(Master &masterin, Grid<TG> &gridin, const std::string namein)
+Field<T,TG> createField(Grid<TG> &gridin, const std::string namein)
 {
-  return Field<T,TG>(masterin, gridin, namein);
+  return Field<T,TG>(gridin, namein);
 }
