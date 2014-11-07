@@ -28,15 +28,17 @@
 #include "Grid.h"
 
 template<class TGrid, class TField>
-DiffusionGPU<TGrid,TField>::DiffusionGPU(Master &masterin, Grid<TGrid> &gridin) :
+DiffusionGPU<TGrid,TField>::DiffusionGPU(Grid<TGrid> &gridin) :
   grid(gridin)
 {
+  Master &master = Master::getInstance();
   master.printMessage("Constructed DiffusionGPU\n");
 }
 
 template<class TGrid, class TField>
 DiffusionGPU<TGrid,TField>::~DiffusionGPU()
 {
+  Master &master = Master::getInstance();
   master.printMessage("Destructed DiffusionGPU\n");
 }
 

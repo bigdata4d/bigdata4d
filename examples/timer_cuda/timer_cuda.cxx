@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
-#include "Master.h"
 #include "Grid.h"
 #include "Field.h"
 #include "Timer.h"
@@ -25,12 +24,11 @@ int main(int argc, char *argv[])
 {
   try
   {
-    Master master;
     try
     {
-      auto grid = createGrid<float>(master, 384, 384, 384);
+      auto grid = createGrid<float>(384, 384, 384);
 
-      auto a = createField<float>(master, grid, "a");
+      auto a = createField<float>(grid, "a");
 
       // fill field with random numbers
       for(auto &i : a.data)
@@ -39,7 +37,7 @@ int main(int argc, char *argv[])
       // make a copy of a
       auto b(a);
 
-      Timer timer1(master, "CPU");
+      Timer timer1("CPU");
       timer1.start();
       for(int n=0; n<100; ++n)
         a += b;
@@ -48,41 +46,41 @@ int main(int argc, char *argv[])
       float *a_gpu, *b_gpu;
       prepareCUDA(&a_gpu, &b_gpu, &b.data[0], &b.data[0]);
 
-      Timer timer2(master, "GPU (manual)");
+      Timer timer2("GPU (manual)");
       timer2.start();
       for(int n=0; n<100; ++n)
         testCUDA(a_gpu, b_gpu);
       waitCUDA();
       timer2.end();
 
-      auto acuda = createField<float>(master, grid, "acuda");
+      auto acuda = createField<float>(grid, "acuda");
       finishCUDA(a_gpu, b_gpu, &acuda.data[0]);
 
       // THRUST
       thrust::device_vector<float> athrust(b.data.begin(), b.data.end());
       thrust::device_vector<float> bthrust(b.data.begin(), b.data.end());
 
-      Timer timer3(master, "GPU (Thrust)");
+      Timer timer3("GPU (Thrust)");
       timer3.start();
       for(int n=0; n<100; ++n)
         testCUDA_thrust(athrust, bthrust);
       waitCUDA();
       timer3.end();
 
-      auto athrustout = createField<float>(master, grid, "athrustout");
+      auto athrustout = createField<float>(grid, "athrustout");
       thrust::copy(athrust.begin(), athrust.end(), athrustout.data.begin());
 
       // cuBLAS
       prepareCUDA_cublas(&a_gpu, &b_gpu, &b.data[0], &b.data[0]);
 
-      Timer timer4(master, "GPU (cuBLAS)");
+      Timer timer4("GPU (cuBLAS)");
       timer4.start();
       for(int n=0; n<100; ++n)
         testCUDA_cublas(a_gpu, b_gpu);
       waitCUDA();
       timer4.end();
 
-      auto acublas = createField<float>(master, grid, "acublas");
+      auto acublas = createField<float>(grid, "acublas");
       finishCUDA_cublas(a_gpu, b_gpu, &acublas.data[0]);
 
       std::ostringstream message;
@@ -94,6 +92,7 @@ int main(int argc, char *argv[])
               << "Speedup CUDA (no thrust): " << timer1.getTotal() / timer2.getTotal() << "\n"
               << "Speedup CUDA (thrust)   : " << timer1.getTotal() / timer3.getTotal() << "\n"
               << "Speedup CUDA (cublas)   : " << timer1.getTotal() / timer4.getTotal() << "\n";
+      Master &master = Master::getInstance();
       master.printMessage(message.str());
 
       for(int n=3; n<a.data.size(); n+=384*384*20)
@@ -115,6 +114,7 @@ int main(int argc, char *argv[])
     {
       std::ostringstream message;
       message << "Exception caught: " << e.what() << "\n";
+      Master &master = Master::getInstance();
       master.printError(message.str());
       throw 1;
     }
@@ -122,6 +122,7 @@ int main(int argc, char *argv[])
     // catch unknown errors
     catch (...)
     {
+      Master &master = Master::getInstance();
       master.printError("Oops! An unknown error has occured!\n");
       throw 1;
     }

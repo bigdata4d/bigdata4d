@@ -14,30 +14,29 @@ int main(int argc, char *argv[])
 {
   try
   {
-    Master master;
     try
     {
-      Grid<double> grid = createGrid<double>(master, 128, 128, 512, 3);
+      Grid<double> grid = createGrid<double>(128, 128, 512, 3);
 
-      Field<double,double> a  = createField<double>(master, grid, "a" );
-      Field<double,double> at = createField<double>(master, grid, "at");
+      Field<double,double> a  = createField<double>(grid, "a" );
+      Field<double,double> at = createField<double>(grid, "at");
 
       a.randomize(10);
 
-      Diffusion<double,double> diff(master, grid);
+      Diffusion<double,double> diff(grid);
 
-      Timer timer1(master, "Diffusion (CPU)");
+      Timer timer1("Diffusion (CPU)");
       timer1.start();
       for(int n=0; n<100; ++n)
         diff.exec(at, a);
       timer1.end();
 
-      DiffusionGPU<double,double> diffGPU(master, grid);
+      DiffusionGPU<double,double> diffGPU(grid);
 
       thrust::device_vector<double> a_gpu (a.data.begin(), a.data.end());
       thrust::device_vector<double> at_gpu(a.data.size());
 
-      Timer timer2(master, "Diffusion (GPU)");
+      Timer timer2("Diffusion (GPU)");
       timer2.start();
       for(int n=0; n<100; ++n)
         diffGPU.exec(at_gpu, a_gpu);
@@ -45,9 +44,10 @@ int main(int argc, char *argv[])
       cudaDeviceSynchronize();
       timer2.end();
 
-      Field<double, double> at_cuda = createField<double>(master, grid, "at_cuda");
+      Field<double, double> at_cuda = createField<double>(grid, "at_cuda");
       thrust::copy(at_gpu.begin(), at_gpu.end(), at_cuda.data.begin());
 
+      Master &master = Master::getInstance();
       std::ostringstream message;
       message << "Elapsed time (s): "
               << std::fixed << std::setprecision(5) << timer1.getTotal() << ", "
@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
     {
       std::ostringstream message;
       message << "Exception: " << e.what() << "\n";
+      Master &master = Master::getInstance();
       master.printMessage(message.str());
       throw 1;
     }

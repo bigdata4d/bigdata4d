@@ -26,10 +26,10 @@
 #include "Grid.h"
 
 template<class T, class TF>
-Diffusion<T,TF>::Diffusion(Master &masterin, Grid<T> &gridin) :
-  master(masterin),
+Diffusion<T,TF>::Diffusion(Grid<T> &gridin) :
   grid(gridin)
 {
+  Master &master = Master::getInstance();
   master.printMessage("Constructed Diffusion\n");
 }
 
@@ -76,5 +76,6 @@ void Diffusion<T,TF>::exec(Field<TF,T> &at, const Field<TF,T> &a)
 template<class T, class TF>
 Diffusion<T,TF>::~Diffusion()
 {
+  Master &master = Master::getInstance();
   master.printMessage("Destructed Diffusion\n");
 }
