@@ -9,7 +9,7 @@ endif()
 
 set(GNU_SED "gsed")
 
-set(USER_CXX_FLAGS "-stdlib=libstdc++")
+set(USER_CXX_FLAGS "-std=c++11 -stdlib=libstdc++")
 set(USER_CXX_FLAGS_RELEASE "-O3 -ffast-math -mtune=native -march=native")
 set(USER_CXX_FLAGS_DEBUG "-O0 -g -Wall -Wno-unknown-pragmas")
 
