@@ -29,7 +29,7 @@
 #define restrict RESTRICTKEYWORD
 
 template<class T, class TG>
-Field<T,TG>::Field(Grid<TG> &gridin, const std::string namein)
+inline Field<T,TG>::Field(Grid<TG> &gridin, const std::string namein)
   : grid(gridin)
 {
   name = namein;
@@ -51,7 +51,7 @@ Field<T,TG>::Field(Grid<TG> &gridin, const std::string namein)
 }
 
 template<class T, class TG>
-Field<T,TG>::~Field()
+inline Field<T,TG>::~Field()
 {
   Master &master = Master::getInstance();
   std::ostringstream message;
@@ -61,7 +61,7 @@ Field<T,TG>::~Field()
 
 // overloaded operators
 template<class T, class TG>
-Field<T,TG>::Field(const Field &fieldin)
+inline Field<T,TG>::Field(const Field &fieldin)
   : grid(fieldin.grid)
 {
   Master &master = Master::getInstance();
@@ -85,7 +85,7 @@ namespace
 }
 
 template<class T, class TG>
-Field<T,TG>& Field<T,TG>::operator= (const Field &fieldin)
+inline Field<T,TG>& Field<T,TG>::operator= (const Field &fieldin)
 {
   // non-vectorized copy
   // this->data = fieldin.data;
@@ -107,7 +107,7 @@ namespace
 }
 
 template<class T, class TG>
-Field<T,TG>& Field<T,TG>::operator+=(const Field &fieldin)
+inline Field<T,TG>& Field<T,TG>::operator+=(const Field &fieldin)
 {
   // for(int i=0; i<this->data.size(); ++i)
   //   this->data[i] += fieldin.data[i];
@@ -128,7 +128,7 @@ namespace
 }
 
 template<class T, class TG>
-Field<T,TG> Field<T,TG>::operator+ (const Field<T,TG> &fieldin) const
+inline Field<T,TG> Field<T,TG>::operator+ (const Field<T,TG> &fieldin) const
 {
   // copy the field
   Field<T,TG> fieldout(*this);
@@ -144,7 +144,7 @@ Field<T,TG> Field<T,TG>::operator+ (const Field<T,TG> &fieldin) const
 }
 
 template<class T, class TG>
-void Field<T,TG>::randomize(long base)
+inline void Field<T,TG>::randomize(long base)
 {
   const GridDims dims = grid.getDims();
 
@@ -160,7 +160,7 @@ void Field<T,TG>::randomize(long base)
 
 // out of class definitions
 template<class T, class TG>
-Field<T,TG> createField(Grid<TG> &gridin, const std::string namein)
+inline Field<T,TG> createField(Grid<TG> &gridin, const std::string namein)
 {
   return Field<T,TG>(gridin, namein);
 }

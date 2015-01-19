@@ -27,7 +27,7 @@
 #include "Master.h"
 
 template<class T>
-Grid<T>::Grid(GridDims &dimsin, GridVars<T> &varsin) :
+inline Grid<T>::Grid(GridDims &dimsin, GridVars<T> &varsin) :
   dims(dimsin),
   vars(varsin)
 {
@@ -36,26 +36,26 @@ Grid<T>::Grid(GridDims &dimsin, GridVars<T> &varsin) :
 }
 
 template<class T>
-Grid<T>::~Grid()
+inline Grid<T>::~Grid()
 {
   Master &master = Master::getInstance();
   master.printMessage("Destructed Grid\n");
 }
 
 template<class T>
-const GridDims Grid<T>::getDims()
+inline const GridDims Grid<T>::getDims()
 {
   return dims;
 }
 
 template<class T>
-long Grid<T>::getncells()
+inline long Grid<T>::getncells()
 {
   return dims.ncells;
 }
 
 template<class T>
-Grid<T> createGrid(long itotin, long jtotin, long ktotin, long gc)
+inline Grid<T> createGrid(long itotin, long jtotin, long ktotin, long gc)
 {
   long ntot = itotin*jtotin*ktotin;
 

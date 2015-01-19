@@ -26,7 +26,7 @@
 #include "Grid.h"
 
 template<class T, class TF>
-Diffusion<T,TF>::Diffusion(Grid<T> &gridin) :
+inline Diffusion<T,TF>::Diffusion(Grid<T> &gridin) :
   grid(gridin)
 {
   Master &master = Master::getInstance();
@@ -34,7 +34,7 @@ Diffusion<T,TF>::Diffusion(Grid<T> &gridin) :
 }
 
 template<class T, class TF>
-void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * const restrict a, const GridDims &dims)
+inline void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * const restrict a, const GridDims &dims)
 {
   long ijk,ii1,ii2,ii3,jj1,jj2,jj3,kk1,kk2,kk3;
   ii1 = 1;
@@ -67,14 +67,14 @@ void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * const res
 }
 
 template<class T, class TF>
-void Diffusion<T,TF>::exec(Field<TF,T> &at, const Field<TF,T> &a)
+inline void Diffusion<T,TF>::exec(Field<TF,T> &at, const Field<TF,T> &a)
 {
   const GridDims dims = grid.getDims();
   execDiffusion(&at.data[0], &a.data[0], dims);
 }
 
 template<class T, class TF>
-Diffusion<T,TF>::~Diffusion()
+inline Diffusion<T,TF>::~Diffusion()
 {
   Master &master = Master::getInstance();
   master.printMessage("Destructed Diffusion\n");

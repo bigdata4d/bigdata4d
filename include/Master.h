@@ -47,8 +47,8 @@ class Master
     ~Master();
 
     // \TODO CUDA does not allow yet delete
-    Master(const Master &); //= delete;
-    Master &operator=(const Master &); //= delete;
+    Master(const Master &) = delete;
+    Master &operator=(const Master &) = delete;
 
     void cleanup();
     int checkError(int);
@@ -58,4 +58,6 @@ class Master
 
     int nprocs;
 };
+
+#include "Master.hxx"
 #endif

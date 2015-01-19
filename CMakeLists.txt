@@ -99,5 +99,4 @@ if(USECUDA)
   message(STATUS "NVCC flags: " ${CUDA_NVCC_FLAGS})
 endif()
 
-add_subdirectory(src)
 add_subdirectory(examples)

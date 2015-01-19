@@ -31,14 +31,14 @@
 #include <sstream>
 #include "Master.h"
 
-Master &Master::getInstance()
+inline Master &Master::getInstance()
 {
   static Master master;
   return master;
 }
 
 #ifdef USEMPI
-Master::Master()
+inline Master::Master()
 {
   initialized = false;
   allocated = false;
@@ -86,7 +86,7 @@ Master::Master()
   }
 }
 #else
-Master::Master()
+inline Master::Master()
 {
   initialized = true;
   allocated = false;
@@ -100,7 +100,7 @@ Master::Master()
 }
 #endif
 
-Master::~Master()
+inline Master::~Master()
 {
   cleanup();
 
@@ -109,7 +109,7 @@ Master::~Master()
   printMessage(message.str());
 }
 
-void Master::cleanup()
+inline void Master::cleanup()
 {
   #ifdef USEMPI
   if(initialized)
@@ -191,19 +191,19 @@ int Master::init()
 }
 */
 
-void Master::printMessage(std::string message)
+inline void Master::printMessage(std::string message)
 {
   if(mpiid == 0)
     std::cout << message;
 }
 
-void Master::printError(std::string message)
+inline void Master::printError(std::string message)
 {
   if(mpiid == 0)
     std::cerr << message;
 }
 
-int Master::checkError(int n)
+inline int Master::checkError(int n)
 {
   #ifdef USEMPI
   char errbuffer[MPI_MAX_ERROR_STRING];
@@ -224,7 +224,7 @@ int Master::checkError(int n)
   return 0;
 }
 
-double Master::getTime()
+inline double Master::getTime()
 {
   #ifdef USEMPI
   return MPI_Wtime();

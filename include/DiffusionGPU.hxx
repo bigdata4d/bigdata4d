@@ -28,7 +28,7 @@
 #include "Grid.h"
 
 template<class TGrid, class TField>
-DiffusionGPU<TGrid,TField>::DiffusionGPU(Grid<TGrid> &gridin) :
+inline DiffusionGPU<TGrid,TField>::DiffusionGPU(Grid<TGrid> &gridin) :
   grid(gridin)
 {
   Master &master = Master::getInstance();
@@ -36,7 +36,7 @@ DiffusionGPU<TGrid,TField>::DiffusionGPU(Grid<TGrid> &gridin) :
 }
 
 template<class TGrid, class TField>
-DiffusionGPU<TGrid,TField>::~DiffusionGPU()
+inline DiffusionGPU<TGrid,TField>::~DiffusionGPU()
 {
   Master &master = Master::getInstance();
   master.printMessage("Destructed DiffusionGPU\n");
@@ -79,7 +79,7 @@ __global__ void execDiffusion(TField * __restrict__ at, TField * __restrict__ a,
 }
 
 template<class TGrid, class TField>
-void DiffusionGPU<TGrid,TField>::exec(thrust::device_vector<TField> &at_gpu, thrust::device_vector<TField> &a_gpu)
+inline void DiffusionGPU<TGrid,TField>::exec(thrust::device_vector<TField> &at_gpu, thrust::device_vector<TField> &a_gpu)
 {
   const GridDims dims = grid.getDims();
   TField *at = thrust::raw_pointer_cast(at_gpu.data());

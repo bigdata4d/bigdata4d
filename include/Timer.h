@@ -42,4 +42,6 @@ class Timer
     std::vector<double> samples;
     std::string name;
 };
+
+#include "Timer.hxx"
 #endif

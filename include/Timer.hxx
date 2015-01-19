@@ -26,16 +26,16 @@
 #include "Timer.h"
 #include "Master.h"
 
-Timer::Timer(std::string namein)
+inline Timer::Timer(std::string namein)
 {
   name = namein;
 }
 
-Timer::~Timer()
+inline Timer::~Timer()
 {
 }
 
-void Timer::start()
+inline void Timer::start()
 {
   Master &master = Master::getInstance();
   std::ostringstream message;
@@ -44,7 +44,7 @@ void Timer::start()
   samples.push_back(master.getTime());
 }
 
-void Timer::end()
+inline void Timer::end()
 {
   Master &master = Master::getInstance();
   samples.push_back(master.getTime());
@@ -54,13 +54,13 @@ void Timer::end()
   master.printMessage(message.str());
 }
 
-void Timer::sample()
+inline void Timer::sample()
 {
   Master &master = Master::getInstance();
   samples.push_back(master.getTime());
 }
 
-double Timer::getTotal()
+inline double Timer::getTotal()
 {
   Master &master = Master::getInstance();
   return samples.back() - samples.front();

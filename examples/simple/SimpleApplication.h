@@ -26,8 +26,6 @@
 
 #include "Application.h"
 
-class Master;
-
 class SimpleApplication : public Application
 {
   public:
