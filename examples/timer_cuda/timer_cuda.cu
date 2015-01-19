@@ -3,7 +3,7 @@
  * Copyright (c) 2014-2015 Chiel van Heerwaarden
  *
  * Many of the classes and functions in BigDataGrid are derived from
- * MicroHH (https://github.com/MicroHH)
+ * MicroHH (https://github.com/microhh)
  *
  * This file is part of BigDataGrid
  *
