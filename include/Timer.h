@@ -25,6 +25,9 @@
 #define TIMER
 
 #include <vector>
+#include <sstream>
+#include <iomanip>
+#include "Master.h"
 
 class Timer
 {
@@ -43,5 +46,45 @@ class Timer
     std::string name;
 };
 
-#include "Timer.hxx"
+
+// IMPLEMENTATION BELOW
+inline Timer::Timer(std::string namein)
+{
+  name = namein;
+}
+
+inline Timer::~Timer()
+{
+}
+
+inline void Timer::start()
+{
+  Master &master = Master::getInstance();
+  std::ostringstream message;
+  message << "Start timer " << name << "\n";
+  master.printMessage(message.str());
+  samples.push_back(master.getTime());
+}
+
+inline void Timer::end()
+{
+  Master &master = Master::getInstance();
+  samples.push_back(master.getTime());
+  std::ostringstream message;
+  message << "End timer " << name << ", elapsed time (s): "
+          << std::setprecision(5) << getTotal() << "\n";
+  master.printMessage(message.str());
+}
+
+inline void Timer::sample()
+{
+  Master &master = Master::getInstance();
+  samples.push_back(master.getTime());
+}
+
+inline double Timer::getTotal()
+{
+  Master &master = Master::getInstance();
+  return samples.back() - samples.front();
+}
 #endif
