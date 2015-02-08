@@ -35,6 +35,8 @@ class Master
   public:
     static Master &getInstance();
 
+    std::string getVersion();
+
     void printMessage(std::string);
     void printError  (std::string);
 

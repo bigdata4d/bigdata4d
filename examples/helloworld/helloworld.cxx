@@ -29,7 +29,8 @@ int main(int argc, char *argv[])
   try
   {
     Master &master = Master::getInstance();
-    master.printMessage("Hello World!\n");
+    master.printMessage("Hello World from version: "
+                       + master.getVersion() + " !\n");
   }
 
   catch (...)

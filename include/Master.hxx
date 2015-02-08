@@ -37,6 +37,11 @@ inline Master &Master::getInstance()
   return master;
 }
 
+inline std::string Master::getVersion()
+{
+  return std::string(GITHASH);
+}
+
 #ifdef USEMPI
 inline Master::Master()
 {
