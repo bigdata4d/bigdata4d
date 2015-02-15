@@ -92,16 +92,20 @@ inline void Diffusion<T,TF>::exec(Field<TF,T>& at, const Field<TF,T>& a, const b
   const GridDims dims = grid.getDims();
   if (threaded)
   {
-    const long kstart1 = dims.kstart;
-    const long kstart2 = dims.kstart + dims.ktot/2;
-    const long kend1 = kstart2;
-    const long kend2 = dims.kend;
+    const int nthreads = 2;
+    const int kstep = dims.ktot / nthreads;
 
-    std::thread t1(&Diffusion<T,TF>::execDiffusion, this, &at.data[0], &a.data[0], dims, kstart1, kend1);
-    std::thread t2(&Diffusion<T,TF>::execDiffusion, this, &at.data[0], &a.data[0], dims, kstart2, kend2);
+    std::vector<std::thread> threads;
 
-    t1.join();
-    t2.join();
+    for (int n=0; n<nthreads; ++n)
+    {
+      const long kstart = dims.kstart + n*kstep;
+      const long kend   = dims.kstart + (n+1)*kstep;
+      threads.push_back( std::thread(&Diffusion<T,TF>::execDiffusion, this, &at.data[0], &a.data[0], dims, kstart, kend) );
+    }
+
+    for (std::thread& t : threads)
+      t.join();
   }
   else
     execDiffusion(&at.data[0], &a.data[0], dims, dims.kstart, dims.kend);
