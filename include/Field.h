@@ -37,8 +37,11 @@ class Field
     virtual ~Field();
 
     Field(const Field &);
-    Field<T,TG> & operator= (const Field &);
-    Field<T,TG> & operator+=(const Field &);
+    Field<T,TG>& operator= (const Field &);
+    Field<T,TG>& operator+=(const Field &);
+
+    T  operator()(long, long, long) const;
+    T& operator()(long, long, long);
 
     Field operator+ (const Field &) const;
 
@@ -143,6 +146,20 @@ inline Field<T,TG>& Field<T,TG>::operator+=(const Field &fieldin)
   copyaddvec(&data[0], &fieldin.data[0], data.size());
 
   return *this;
+}
+
+template<class T, class TG>
+inline T Field<T,TG>::operator()(const long i, const long j, const long k) const
+{
+  GridDims dims = grid.getDims();
+  return data[i + j*dims.icells + k*dims.ijcells];
+}
+
+template<class T, class TG>
+inline T& Field<T,TG>::operator()(const long i, const long j, const long k)
+{
+  GridDims dims = grid.getDims();
+  return data[i + j*dims.icells + k*dims.ijcells];
 }
 
 namespace
