@@ -24,6 +24,7 @@
 #ifndef DIFFUSION
 #define DIFFUSION
 
+#include <thread>
 #include "Master.h"
 #include "Field.h"
 #include "Grid.h"
@@ -35,13 +36,13 @@ class Diffusion
     Diffusion(Grid<T> &);
     virtual ~Diffusion();
 
-    virtual void exec(Field<TF,T> &, const Field<TF,T> &);
+    virtual void exec(Field<TF,T>&, const Field<TF,T>&, bool);
 
   protected:
     Grid<T> &grid;
 
   private:
-    void execDiffusion(TF * const, const TF * const, const GridDims &);
+    void execDiffusion(TF * const, const TF * const, const GridDims);
 };
 
 // IMPLEMENTATION BELOW
@@ -54,7 +55,7 @@ inline Diffusion<T,TF>::Diffusion(Grid<T> &gridin) :
 }
 
 template<class T, class TF>
-inline void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * const restrict a, const GridDims &dims)
+inline void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * const restrict a, const GridDims dims)
 {
   long ijk,ii1,ii2,ii3,jj1,jj2,jj3,kk1,kk2,kk3;
   ii1 = 1;
@@ -87,10 +88,18 @@ inline void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * co
 }
 
 template<class T, class TF>
-inline void Diffusion<T,TF>::exec(Field<TF,T> &at, const Field<TF,T> &a)
+inline void Diffusion<T,TF>::exec(Field<TF,T>& at, const Field<TF,T>& a, const bool threaded)
 {
   const GridDims dims = grid.getDims();
-  execDiffusion(&at.data[0], &a.data[0], dims);
+  if (threaded)
+  {
+    std::thread t1(&Diffusion<T,TF>::execDiffusion, this, &at.data[0], &a.data[0], dims);
+    // std::thread t2(&Diffusion<T,TF>::execDiffusion, this, &at.data[0], &a.data[0], dims);
+    t1.join();
+    // t2.join();
+  }
+  else
+    execDiffusion(&at.data[0], &a.data[0], dims);
 }
 
 template<class T, class TF>
