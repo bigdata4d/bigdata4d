@@ -42,7 +42,7 @@ class Diffusion
     Grid<T> &grid;
 
   private:
-    void execDiffusion(TF * const, const TF * const, const GridDims);
+    void execDiffusion(TF * const, const TF * const, const GridDims, long, long);
 };
 
 // IMPLEMENTATION BELOW
@@ -55,7 +55,7 @@ inline Diffusion<T,TF>::Diffusion(Grid<T> &gridin) :
 }
 
 template<class T, class TF>
-inline void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * const restrict a, const GridDims dims)
+inline void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * const restrict a, const GridDims dims, const long kstart, const long kend)
 {
   long ijk,ii1,ii2,ii3,jj1,jj2,jj3,kk1,kk2,kk3;
   ii1 = 1;
@@ -73,7 +73,7 @@ inline void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * co
   const T c2 =   -54./576.;
   const T c3 =     1./576.;
 
-  for(long k=dims.kstart; k<dims.kend; ++k)
+  for(long k=kstart; k<kend; ++k)
     for(long j=dims.jstart; j<dims.jend; ++j)
       for(long i=dims.istart; i<dims.iend; ++i)
       {
@@ -93,13 +93,19 @@ inline void Diffusion<T,TF>::exec(Field<TF,T>& at, const Field<TF,T>& a, const b
   const GridDims dims = grid.getDims();
   if (threaded)
   {
-    std::thread t1(&Diffusion<T,TF>::execDiffusion, this, &at.data[0], &a.data[0], dims);
-    // std::thread t2(&Diffusion<T,TF>::execDiffusion, this, &at.data[0], &a.data[0], dims);
+    const long kstart1 = dims.kstart;
+    const long kstart2 = dims.kstart + dims.ktot/2;
+    const long kend1 = kstart2;
+    const long kend2 = dims.kend;
+
+    std::thread t1(&Diffusion<T,TF>::execDiffusion, this, &at.data[0], &a.data[0], dims, kstart1, kend1);
+    std::thread t2(&Diffusion<T,TF>::execDiffusion, this, &at.data[0], &a.data[0], dims, kstart2, kend2);
+
     t1.join();
-    // t2.join();
+    t2.join();
   }
   else
-    execDiffusion(&at.data[0], &a.data[0], dims);
+    execDiffusion(&at.data[0], &a.data[0], dims, dims.kstart, dims.kend);
 }
 
 template<class T, class TF>
