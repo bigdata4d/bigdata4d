@@ -89,7 +89,7 @@ inline void Diffusion<T,TF>::execDiffusion(TF * const restrict at, const TF * co
 template<class T, class TF>
 inline void Diffusion<T,TF>::exec(Field<TF,T>& at, const Field<TF,T>& a, const bool threaded)
 {
-  const GridDims dims = grid.getDims();
+  const GridDims& dims = grid.getDims();
   if (threaded)
   {
     const int nthreads = 2;
