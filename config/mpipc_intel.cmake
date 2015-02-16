@@ -8,7 +8,7 @@ else()
 endif()
 
 set(USER_CXX_FLAGS "-restrict -std=c++11")
-set(USER_CXX_FLAGS_RELEASE "-xHOST -O3")
+set(USER_CXX_FLAGS_RELEASE "-xHOST -Ofast")
 set(USER_CXX_FLAGS_DEBUG "-traceback -check=conversions,stack,uninit -check-pointers=rw -check-pointers-dangling=all-check-pointers-undimensioned -fp-stack-check -fp-trap=common -fp-trap-all=common")
 
 set(FFTW_INCLUDE_DIR   "/sw/squeeze-x64/numerics/fftw-3.3-openmp-gccsys/include")
