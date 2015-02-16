@@ -66,8 +66,8 @@ class Grid
     Grid(GridDims &, GridVars<T> &);
     ~Grid();
 
-    const GridDims getDims();
-    long getncells();
+    const GridDims& getDims() const { return dims; }
+    long getncells() const { return dims.ncells; }
 
   protected:
     const GridDims dims;
@@ -93,18 +93,6 @@ inline Grid<T>::~Grid()
 {
   Master &master = Master::getInstance();
   master.printMessage("Destructed Grid\n");
-}
-
-template<class T>
-inline const GridDims Grid<T>::getDims()
-{
-  return dims;
-}
-
-template<class T>
-inline long Grid<T>::getncells()
-{
-  return dims.ncells;
 }
 
 template<class T>
