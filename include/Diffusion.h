@@ -42,7 +42,7 @@ class Diffusion
     Grid<T> &grid;
 
   private:
-    void execDiffusion(TF * const, const TF * const, const GridDims, long, long);
+    void execDiffusion(TF* const restrict, const TF* const restrict, const GridDims, long, long);
 };
 
 // IMPLEMENTATION BELOW
