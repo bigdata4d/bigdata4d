@@ -33,53 +33,53 @@
 
 int main(int argc, char *argv[])
 {
-  try
-  {
-    const int iter = 100;
-    Grid<double> grid = createGrid<double>(128, 128, 512, 3);
+    try
+    {
+        const int iter = 100;
+        Grid<double> grid = createGrid<double>(128, 128, 512, 3);
 
-    Field<double,double> a   = createField<double>(grid, "a"  );
-    Field<double,double> at  = createField<double>(grid, "at" );
-    Field<double,double> at2 = createField<double>(grid, "at2");
+        Field<double,double> a   = createField<double>(grid, "a"  );
+        Field<double,double> at  = createField<double>(grid, "at" );
+        Field<double,double> at2 = createField<double>(grid, "at2");
 
-    a.randomize(10);
+        a.randomize(10);
 
-    Diffusion<double,double> diff(grid);
+        Diffusion<double,double> diff(grid);
 
-    Timer timer1("Diffusion (CPU), not threaded");
-    timer1.start();
-    for(int n=0; n<iter; ++n)
-      diff.exec(at, a, false);
-    timer1.end();
+        Timer timer1("Diffusion (CPU), not threaded");
+        timer1.start();
+        for (int n=0; n<iter; ++n)
+            diff.exec(at, a, false);
+        timer1.end();
 
-    Timer timer2("Diffusion (CPU), threaded");
-    timer2.start();
-    for(int n=0; n<iter; ++n)
-      diff.exec(at2, a, true);
-    timer2.end();
+        Timer timer2("Diffusion (CPU), threaded");
+        timer2.start();
+        for (int n=0; n<iter; ++n)
+            diff.exec(at2, a, true);
+        timer2.end();
 
-    // Check for identical results
-    bool identical = true;
-    const GridDims dims = grid.getDims();
-    for(long k=dims.kstart; k<dims.kend; ++k)
-      for(long j=dims.jstart; j<dims.jend; ++j)
-        for(long i=dims.istart; i<dims.iend; ++i)
-          if (at(i,j,k) != at2(i,j,k))
-            identical = false;
+        // Check for identical results
+        bool identical = true;
+        const GridDims dims = grid.getDims();
+        for (long k=dims.kstart; k<dims.kend; ++k)
+            for (long j=dims.jstart; j<dims.jend; ++j)
+                for (long i=dims.istart; i<dims.iend; ++i)
+                    if (at(i,j,k) != at2(i,j,k))
+                        identical = false;
 
-    std::ostringstream message;
-    message << "The fields at and at2 are identical: " << identical << std::endl;
-    Master::getInstance().printMessage(message.str());
-  }
+        std::ostringstream message;
+        message << "The fields at and at2 are identical: " << identical << std::endl;
+        Master::getInstance().printMessage(message.str());
+    }
 
-  catch (std::exception &e)
-  {
-    std::ostringstream message;
-    message << "Exception: " << e.what() << "\n";
-    Master &master = Master::getInstance();
-    master.printMessage(message.str());
-    throw 1;
-  }
+    catch (std::exception &e)
+    {
+        std::ostringstream message;
+        message << "Exception: " << e.what() << "\n";
+        Master &master = Master::getInstance();
+        master.printMessage(message.str());
+        throw 1;
+    }
 
-  return 0;
+    return 0;
 }
