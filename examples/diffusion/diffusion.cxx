@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     try
     {
         const int iter = 100;
-        Grid<double> grid = createGrid<double>(128, 128, 512, 3);
+        Grid<double> grid = createGrid<double>(128, 128, 128, 3);
 
         Field<double,double> a   = createField<double>(grid, "a"  );
         Field<double,double> at  = createField<double>(grid, "at" );
@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
                 for (long i=dims.istart; i<dims.iend; ++i)
                     if (at(i,j,k) != at2(i,j,k))
                         identical = false;
+
         if (!identical)
             throw std::runtime_error("Threaded version does not return identical field!");
     }

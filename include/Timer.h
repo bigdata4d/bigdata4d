@@ -84,7 +84,6 @@ inline void Timer::sample()
 
 inline double Timer::getTotal()
 {
-  Master &master = Master::getInstance();
   return samples.back() - samples.front();
 }
 #endif
