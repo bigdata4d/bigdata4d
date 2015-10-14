@@ -66,19 +66,17 @@ int main(int argc, char *argv[])
                 for (long i=dims.istart; i<dims.iend; ++i)
                     if (at(i,j,k) != at2(i,j,k))
                         identical = false;
-
-        std::ostringstream message;
-        message << "The fields at and at2 are identical: " << identical << std::endl;
-        Master::getInstance().printMessage(message.str());
+        if (!identical)
+            throw std::runtime_error("Threaded version does not return identical field!");
     }
 
     catch (std::exception &e)
     {
         std::ostringstream message;
-        message << "Exception: " << e.what() << "\n";
+        message << "Exited with exception: " << e.what() << "\n";
         Master &master = Master::getInstance();
         master.printMessage(message.str());
-        throw 1;
+        return 1;
     }
 
     return 0;
